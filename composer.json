@@ -1,0 +1,43 @@
+{
+    "name": "ccns/ccns-ecommerce-cart",
+    "description": "A Laravel package for e-commerce cart management.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Coconut Soft Creation",
+            "email": "email@example.com"
+        }
+    ],
+    "require-dev": {
+        "php": "^8.2",
+        "illuminate/support": "^10.0",
+        "laravel/framework": "^v11.0.0",
+        "laravel/tinker": "^2.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ccns\\CcnsEcommerceCart\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ccns\\CcnsEcommerceCart\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ccns\\CcnsEcommerceCart\\CartServiceProvider"
+            ],
+            "aliases": {
+                "Cart": "Ccns\\CcnsEcommerceCart\\Facades\\Cart"
+            }
+        },
+        "branch-alias": {
+            "dev-main": "1.x"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
