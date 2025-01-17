@@ -1,6 +1,7 @@
 {
     "name": "ccns/ccns-ecommerce-cart",
     "description": "A Laravel package for e-commerce cart management.",
+    "version": "0.1",
     "type": "library",
     "license": "MIT",
     "authors": [
