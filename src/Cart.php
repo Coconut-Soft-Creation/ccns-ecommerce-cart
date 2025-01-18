@@ -26,4 +26,9 @@ class Cart
     public function clear()
     {
     }
+
+    public function getTotalPrice(): float|int
+    {
+        return array_sum($this->items);
+    }
 }

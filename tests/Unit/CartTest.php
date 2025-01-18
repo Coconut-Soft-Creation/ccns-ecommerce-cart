@@ -1,10 +1,9 @@
 <?php
 
-namespace Ccns\CcnsEcommerceCart\Tests;
+namespace Ccns\CcnsEcommerceCart\Tests\Unit;
 
 use Ccns\CcnsEcommerceCart\Cart;
-
-use Tests\TestCase;
+use tests\TestCase;
 
 class CartTest extends TestCase
 {
