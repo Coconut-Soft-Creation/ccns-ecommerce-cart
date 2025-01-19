@@ -2,17 +2,16 @@
 
 namespace Ccns\CcnsEcommerceCart;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class CartServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/ccns-ecommerce-cart.php', 'cart');
+        Blade::componentNamespace('Ccns\\CcnsEcommerceCart\\View\\Components', 'ccns-ecommerce-cart');
 
-        $this->app->singleton('cart', function () {
-            return new Cart();
-        });
+        $this->mergeConfigFrom(__DIR__ . '/../config/ccns-ecommerce-cart.php', 'cart');
     }
 
     public function boot(): void
@@ -26,28 +25,28 @@ class CartServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../config/ccns-ecommerce-cart.php' => config_path('ccns-ecommerce-cart.php'),
-        ], 'config');
+        ], 'ccns-ecommerce-cart-config');
 
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/ccns-ecommerce-cart'),
-        ], 'views');
+        ], 'ccns-ecommerce-cart-views');
 
         $this->publishes([
-            __DIR__ . '/../resources/views/public' => public_path('vendor/ccns-ecommerce-cart'),
-        ], 'assets');
+            __DIR__ . '/../resources/public' => public_path('vendor/ccns-ecommerce-cart'),
+        ], 'ccns-ecommerce-cart-assets');
 
         $this->publishes([
             __DIR__ . '/../database/migrations/' => database_path('migrations'),
-        ], 'migrations');
+        ], 'ccns-ecommerce-cart-migrations');
 
         $this->publishes([
             __DIR__ . '/../lang' => lang_path('vendor/ccns-ecommerce-cart'),
-        ], 'translations');
+        ], 'ccns-ecommerce-cart-translations');
 
         $this->publishes([
             __DIR__ . '/../routes/web.php' => base_path('routes/vendor/ccns-ecommerce-cart/web.php'),
             __DIR__ . '/../routes/api.php' => base_path('routes/vendor/ccns-ecommerce-cart/api.php'),
             __DIR__ . '/../routes/channel.php' => base_path('routes/vendor/ccns-ecommerce-cart/channel.php'),
-        ], 'routes');
+        ], 'ccns-ecommerce-cart-routes');
     }
 }

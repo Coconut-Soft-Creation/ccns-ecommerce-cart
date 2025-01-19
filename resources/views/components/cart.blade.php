@@ -25,7 +25,7 @@
             @endforeach
             </tbody>
         </table>
-        <p><strong>Total:</strong> ${{ number_format($total, 2) }}</p>
+        <p><strong>Total:</strong> ${{ number_format($totalPrice, 2) }}</p>
     @else
         <p>Your cart is empty.</p>
     @endif

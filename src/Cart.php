@@ -2,33 +2,54 @@
 
 namespace Ccns\CcnsEcommerceCart;
 
-class Cart
+use Ccns\CcnsEcommerceCart\Contracts\Cart as CartInterface;
+
+class Cart implements CartInterface
 {
     protected array $items = [];
+
+    public function addItem(string $itemId, int $quantity = 1, array $options = []): bool
+    {
+        $this->items[$itemId] = [
+            'quantity' => $quantity,
+            'options' => $options,
+        ];
+        return true;
+    }
+
+    public function removeItem(string $itemId): bool
+    {
+        unset($this->items[$itemId]);
+        return true;
+    }
+
+    public function updateItem(string $itemId, int $quantity): bool
+    {
+        if (isset($this->items[$itemId])) {
+            $this->items[$itemId]['quantity'] = $quantity;
+            return true;
+        }
+        return false;
+    }
 
     public function getItems(): array
     {
         return $this->items;
     }
 
-    public function addItem(mixed $request, mixed $item, mixed $quantity): void
+    public function calculateTotal(): float
     {
-        $this->items[] = [
-            'item' => $item,
-            'quantity' => $quantity,
-        ];
+        $total = 0;
+        foreach ($this->items as $item) {
+            $price = $item['options']['price'] ?? 0;
+            $total += $price * $item['quantity'];
+        }
+        return $total;
     }
 
-    public function removeItem(mixed $request)
+    public function clear(): bool
     {
-    }
-
-    public function clear()
-    {
-    }
-
-    public function getTotalPrice(): float|int
-    {
-        return array_sum($this->items);
+        $this->items = [];
+        return true;
     }
 }

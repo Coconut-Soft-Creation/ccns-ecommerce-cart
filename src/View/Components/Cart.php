@@ -9,18 +9,17 @@ use Illuminate\View\Component;
 class Cart extends Component
 {
     public array $items = [];
-
-    public int $total = 0;
+    public int $totalPrice = 0;
 
     /**
      * Create a new component instance.
      * @param array $items
-     * @param float $total
+     * @param float $totalPrice
      */
-    public function __construct(array $items = [], float $total = 0.0)
+    public function __construct(array $items = [], float $totalPrice = 0.0)
     {
         $this->items = $items;
-        $this->total = $total;
+        $this->totalPrice = $totalPrice;
     }
 
     /**

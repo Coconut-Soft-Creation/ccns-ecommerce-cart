@@ -6,9 +6,9 @@ use Ccns\CcnsEcommerceCart\Cart;
 Route::prefix('cart')->group(function () {
 
     Route::get('/', function (Cart $cart) {
-        $cartItems = $cart->getItems();
-        return view('ecommerce-cart::cart.index', compact('cartItems'));
-    })->name('cart.index');
+         $cartItems = $cart->getItems();
+        return view('ccns-ecommerce-cart::components.cart', ['items' => $cartItems, 'totalPrice' => 0]);
+    })->name('cart');
 
     Route::post('/add', function (Cart $cart) {
         $itemId = request('item_id');
@@ -30,7 +30,7 @@ Route::prefix('cart')->group(function () {
 
     Route::get('/checkout', function (Cart $cart) {
         $cartItems = $cart->getItems();
-        $totalPrice = $cart->getTotalPrice();
+        $totalPrice = $cart->calculateTotal();
 
         return view('ecommerce-cart::cart.checkout', compact('cartItems', 'totalPrice'));
     })->name('cart.checkout');
