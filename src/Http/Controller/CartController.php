@@ -3,7 +3,9 @@
 namespace Ccns\CcnsEcommerceCart\Http\Controller;
 
 use App\Http\Controllers\Controller;
-use Ccns\CcnsEcommerceCart\Models\Cart;
+use Ccns\CcnsEcommerceCart\Cart as CartService;
+use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
+use Ccns\CcnsEcommerceCart\Facades\Cart as CartFacade;
 use Ccns\CcnsEcommerceCart\Http\Requests\StoreCartRequest;
 use Ccns\CcnsEcommerceCart\Http\Requests\UpdateCartRequest;
 
@@ -14,7 +16,6 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -36,7 +37,7 @@ class CartController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Cart $cart)
+    public function show(CartModel $cart)
     {
         //
     }
@@ -44,7 +45,7 @@ class CartController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Cart $cart)
+    public function edit(CartModel $cart)
     {
         //
     }
@@ -52,7 +53,7 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCartRequest $request, Cart $cart)
+    public function update(UpdateCartRequest $request, CartModel $cart)
     {
         //
     }
@@ -60,7 +61,7 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cart $cart)
+    public function destroy(CartModel $cart)
     {
         //
     }

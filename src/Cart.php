@@ -2,12 +2,11 @@
 
 namespace Ccns\CcnsEcommerceCart;
 
-use Ccns\CcnsEcommerceCart\Contracts\Cart as CartInterface;
+use Ccns\CcnsEcommerceCart\Contracts\Cart as CartContract;
 use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Illuminate\Support\Facades\Auth;
-use Random\RandomException;
 
-class Cart implements CartInterface
+class Cart implements CartContract
 {
     protected array $items = [];
 

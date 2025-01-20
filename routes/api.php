@@ -1,21 +1,31 @@
 <?php
 
+use Ccns\CcnsEcommerceCart\Http\Controller\CartController;
+use Ccns\CcnsEcommerceCart\Http\Resources\CartCollection;
+use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Illuminate\Support\Facades\Route;
-use Ccns\CcnsEcommerceCart\Cart;
 
 Route::prefix('api/cart')->group(function () {
-    Route::post('/add', function (Cart $cart) {
-        $cart->addItem(request('item_id'), request('quantity', 1), request('details', []));
-        return response()->json(['message' => 'Item added to cart successfully']);
-    })->name('api.cart.add');
 
-    Route::delete('/remove', function (Cart $cart) {
-        $cart->removeItem(request('item_id'));
-        return response()->json(['message' => 'Item removed from cart successfully']);
-    })->name('api.cart.remove');
+    Route::get('/', function (Request $request) {
+        return new CartCollection(CartModel::paginate());
+    });
 
-    Route::post('/checkout', function (Cart $cart) {
-        $cart->clear();
-        return response()->json(['message' => 'Checkout completed successfully']);
-    })->name('api.cart.complete');
+    Route::post('/create', function (Request $request) {
+        return CartModel::updateOrCreate($request->post());
+    });
+
+    Route::post('/update', function (Request $request) {
+        return CartModel::where('product_id', $request->product_id)
+            ->where('user_id', $request->user_id)
+            ->update(['quantity' => $request->quantity]);
+    });
+
+    Route::post('/delete', function (Request $request) {
+        return CartModel::where('product_id', $request->product_id)
+            ->where('user_id', $request->user_id)
+            ->delete();
+    });
+
+    Route::resource('cart', CartController::class)->except(['create', 'show', 'edit']);
 });

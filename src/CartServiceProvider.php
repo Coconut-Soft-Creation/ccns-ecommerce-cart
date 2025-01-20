@@ -4,6 +4,8 @@ namespace Ccns\CcnsEcommerceCart;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Ccns\CcnsEcommerceCart\Cart as CartService;
+use Ccns\CcnsEcommerceCart\Contracts\Cart as CartContract;
 
 class CartServiceProvider extends ServiceProvider
 {
@@ -13,9 +15,7 @@ class CartServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__ . '/../config/ccns-ecommerce-cart.php', 'cart');
 
-        $this->app->bind(\Ccns\CcnsEcommerceCart\Contracts\Cart::class, function ($app) {
-            return new Cart();
-        });
+        $this->app->bind(CartContract::class, CartService::class);
     }
 
     public function boot(): void

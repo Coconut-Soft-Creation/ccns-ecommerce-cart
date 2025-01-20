@@ -3,11 +3,12 @@
 namespace Ccns\CcnsEcommerceCart\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Ccns\CcnsEcommerceCart\Contracts\Cart as CartContract;
 
 class Cart extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \Ccns\CcnsEcommerceCart\Contracts\Cart::class;
+        return CartContract::class;
     }
 }
