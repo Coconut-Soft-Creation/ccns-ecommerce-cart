@@ -14,18 +14,14 @@ class Cart extends Model
 
     protected $fillable = [
         'user_id',
-        'items',
+        'product_id',
+        'price',
+        'quantity',
+        'total_price',
     ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    protected function casts(): array
-    {
-        return [
-            'items' => 'array',
-        ];
     }
 }

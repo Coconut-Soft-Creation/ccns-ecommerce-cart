@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Feature;
+namespace Ccns\CcnsEcommerceCart\Tests\Feature;
 
 use Tests\TestCase;
 

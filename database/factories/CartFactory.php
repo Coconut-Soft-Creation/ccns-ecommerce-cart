@@ -13,11 +13,16 @@ class CartFactory extends Factory
 
     public function definition(): array
     {
+        $quantity = $this->faker->numberBetween(1, 10);
+        $price = $this->faker->randomFloat(2, 10, 1000);
+
         return [
-            'user_id' => User::factory(),
-            'items' => $this->faker->words(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'id' => $this->faker->uuid,
+            'user_id' => $this->faker->randomNumber(),
+            'product_id' => $this->faker->randomNumber(),
+            'price' => $price,
+            'quantity' => $quantity,
+            'total_price' => $price * $quantity,
         ];
     }
 }

@@ -39,13 +39,6 @@ interface Cart
     public function getItems(): array;
 
     /**
-     * Calculate the total price of the items in the cart.
-     *
-     * @return float
-     */
-    public function calculateTotal(): float;
-
-    /**
      * Clear all items in the cart.
      *
      * @return bool

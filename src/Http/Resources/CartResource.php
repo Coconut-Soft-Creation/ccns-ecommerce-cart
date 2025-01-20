@@ -1,6 +1,6 @@
 <?php
 
-namespace Ccns\CcnsEcommerceCart\Resources;
+namespace Ccns\CcnsEcommerceCart\Http\Resources;
 
 use Ccns\CcnsEcommerceCart\Models\Cart;
 use Illuminate\Http\Request;
@@ -14,7 +14,9 @@ class CartResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'items' => $this->items,
+            'product_id' => $this->product_id,
+            'quantity' => $this->quantity,
+            'price' => $this->price,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

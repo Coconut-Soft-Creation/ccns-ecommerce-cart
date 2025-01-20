@@ -17,10 +17,10 @@
             <tbody>
             @foreach ($items as $item)
                 <tr>
-                    <td>{{ $item['name'] }}</td>
+                    <td>{{ $item['product_id'] }}</td>
                     <td>{{ $item['quantity'] }}</td>
                     <td>{{ number_format($item['price'], 2) }}</td>
-                    <td>{{ number_format($item['quantity'] * $item['price'], 2) }}</td>
+                    <td>{{ number_format($item['total_price']) }}</td>
                 </tr>
             @endforeach
             </tbody>

@@ -12,6 +12,10 @@ class CartServiceProvider extends ServiceProvider
         Blade::componentNamespace('Ccns\\CcnsEcommerceCart\\View\\Components', 'ccns-ecommerce-cart');
 
         $this->mergeConfigFrom(__DIR__ . '/../config/ccns-ecommerce-cart.php', 'cart');
+
+        $this->app->bind(\Ccns\CcnsEcommerceCart\Contracts\Cart::class, function ($app) {
+            return new Cart();
+        });
     }
 
     public function boot(): void

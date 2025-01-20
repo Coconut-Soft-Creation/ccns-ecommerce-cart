@@ -3,6 +3,9 @@
 namespace Ccns\CcnsEcommerceCart;
 
 use Ccns\CcnsEcommerceCart\Contracts\Cart as CartInterface;
+use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
+use Illuminate\Support\Facades\Auth;
+use Random\RandomException;
 
 class Cart implements CartInterface
 {
@@ -10,41 +13,36 @@ class Cart implements CartInterface
 
     public function addItem(string $itemId, int $quantity = 1, array $options = []): bool
     {
-        $this->items[$itemId] = [
-            'quantity' => $quantity,
+        $itemId = rand(1, 999999);
+        $price = rand(10, 999);
+
+        $product = array_rand([
+            'user_id' => 1,
+            'product_id' => $itemId,
             'options' => $options,
-        ];
+            'price' => $price,
+            'quantity' => $quantity,
+            'total_price' => $quantity * $price,
+        ]);
+
+        CartModel::updateOrCreate(['id' => $itemId], $product);
+
         return true;
     }
 
     public function removeItem(string $itemId): bool
     {
-        unset($this->items[$itemId]);
-        return true;
+        return CartModel::where('id', $itemId)->where('user_id', 1)->delete();
     }
 
     public function updateItem(string $itemId, int $quantity): bool
     {
-        if (isset($this->items[$itemId])) {
-            $this->items[$itemId]['quantity'] = $quantity;
-            return true;
-        }
-        return false;
+        return CartModel::where('id', $itemId)->where('user_id', 1)->update(['quantity' => $quantity]);
     }
 
     public function getItems(): array
     {
-        return $this->items;
-    }
-
-    public function calculateTotal(): float
-    {
-        $total = 0;
-        foreach ($this->items as $item) {
-            $price = $item['options']['price'] ?? 0;
-            $total += $price * $item['quantity'];
-        }
-        return $total;
+        return CartModel::with('product')->where('user_id', Auth::id())->get()->toArray();
     }
 
     public function clear(): bool

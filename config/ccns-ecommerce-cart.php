@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'driver' => env('CART_DRIVER', 'database'),
     'tax_rate' => 0.07,
     'queue_connection' => 'database',
     'session_key' => 'cart',

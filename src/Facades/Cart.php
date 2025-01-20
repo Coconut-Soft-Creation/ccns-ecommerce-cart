@@ -8,6 +8,6 @@ class Cart extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \Ccns\CcnsEcommerceCart\Cart::class;
+        return \Ccns\CcnsEcommerceCart\Contracts\Cart::class;
     }
 }
