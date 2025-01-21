@@ -4,6 +4,13 @@ namespace Ccns\CcnsEcommerceCart\Contracts;
 
 interface Cart
 {
+
+    /**
+     * Get all items in the cart.
+     *
+     */
+    public function getItems();
+
     /**
      * Add an item to the cart.
      *
@@ -15,14 +22,6 @@ interface Cart
     public function addItem(string $itemId, int $quantity = 1, array $options = []): bool;
 
     /**
-     * Remove an item from the cart.
-     *
-     * @param string $itemId
-     * @return bool
-     */
-    public function removeItem(string $itemId): bool;
-
-    /**
      * Update the quantity of an item in the cart.
      *
      * @param string $itemId
@@ -32,11 +31,12 @@ interface Cart
     public function updateItem(string $itemId, int $quantity): bool;
 
     /**
-     * Get all items in the cart.
+     * Remove an item from the cart.
      *
-     * @return array
+     * @param string $itemId
+     * @return bool
      */
-    public function getItems(): array;
+    public function removeItem(string $itemId): bool;
 
     /**
      * Clear all items in the cart.

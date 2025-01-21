@@ -4,11 +4,16 @@ namespace Ccns\CcnsEcommerceCart;
 
 use Ccns\CcnsEcommerceCart\Contracts\Cart as CartContract;
 use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class Cart implements CartContract
 {
     protected array $items = [];
+
+    public function getItems(): LengthAwarePaginator
+    {
+        return CartModel::where('user_id', 1)->paginate(5);
+    }
 
     public function addItem(string $itemId, int $quantity = 1, array $options = []): bool
     {
@@ -24,24 +29,19 @@ class Cart implements CartContract
             'total_price' => $quantity * $price,
         ]);
 
-        CartModel::updateOrCreate(['id' => $itemId], $product);
+        CartModel::updateOrCreate(['product_id' => $itemId], $product);
 
         return true;
     }
 
-    public function removeItem(string $itemId): bool
-    {
-        return CartModel::where('id', $itemId)->where('user_id', 1)->delete();
-    }
-
     public function updateItem(string $itemId, int $quantity): bool
     {
-        return CartModel::where('id', $itemId)->where('user_id', 1)->update(['quantity' => $quantity]);
+        return CartModel::where('product_id', $itemId)->where('user_id', 1)->update(['quantity' => $quantity]);
     }
 
-    public function getItems(): array
+    public function removeItem(string $itemId): bool
     {
-        return CartModel::with('product')->where('user_id', Auth::id())->get()->toArray();
+        return CartModel::where('product_id', $itemId)->where('user_id', 1)->delete();
     }
 
     public function clear(): bool

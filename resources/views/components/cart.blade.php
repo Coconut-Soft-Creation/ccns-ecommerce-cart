@@ -4,7 +4,9 @@
 
 <div class="cart-container">
     <h2>Shopping Cart</h2>
-    @if (count($items) > 0)
+    @if($cartItems->isEmpty())
+        <p>Your cart is empty!</p>
+    @else
         <table>
             <thead>
             <tr>
@@ -12,21 +14,29 @@
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Total</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            @foreach ($items as $item)
+            @foreach($cartItems->collection->toArray() as $item)
                 <tr>
-                    <td>{{ $item['product_id'] }}</td>
-                    <td>{{ $item['quantity'] }}</td>
-                    <td>{{ number_format($item['price'], 2) }}</td>
-                    <td>{{ number_format($item['total_price']) }}</td>
+                    <td>{{ $item->product_id }}</td>
+                    <td>{{ $item->quantity }}</td>
+                    <td>{{ $item->price }}</td>
+                    <td>{{ $item->quantity * $item->price }}</td>
+                    <td>
+                        <form action="{{ route('cart.destroy', $item->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Remove</button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
             </tbody>
         </table>
-        <p><strong>Total:</strong> ${{ number_format($totalPrice, 2) }}</p>
-    @else
-        <p>Your cart is empty.</p>
+
+        {{ $cartItems->links() }}
+
     @endif
 </div>

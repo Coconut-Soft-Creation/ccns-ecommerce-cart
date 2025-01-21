@@ -5,7 +5,6 @@ namespace Ccns\CcnsEcommerceCart;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Ccns\CcnsEcommerceCart\Cart as CartService;
-use Ccns\CcnsEcommerceCart\Contracts\Cart as CartContract;
 
 class CartServiceProvider extends ServiceProvider
 {
@@ -15,7 +14,9 @@ class CartServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__ . '/../config/ccns-ecommerce-cart.php', 'cart');
 
-        $this->app->bind(CartContract::class, CartService::class);
+        $this->app->singleton('cart', function ($app) {
+            return new CartService();
+        });
     }
 
     public function boot(): void
@@ -40,8 +41,16 @@ class CartServiceProvider extends ServiceProvider
         ], 'ccns-ecommerce-cart-assets');
 
         $this->publishes([
+            __DIR__ . '/../database/factories/' => database_path('factories'),
+        ], 'ccns-ecommerce-cart-factories');
+
+        $this->publishes([
             __DIR__ . '/../database/migrations/' => database_path('migrations'),
         ], 'ccns-ecommerce-cart-migrations');
+
+        $this->publishes([
+            __DIR__ . '/../database/seeders/' => database_path('seeders'),
+        ], 'ccns-ecommerce-cart-seeders');
 
         $this->publishes([
             __DIR__ . '/../lang' => lang_path('vendor/ccns-ecommerce-cart'),

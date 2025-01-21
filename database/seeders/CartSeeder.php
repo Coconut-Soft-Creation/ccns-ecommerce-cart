@@ -1,6 +1,6 @@
 <?php
 
-namespace database\seeders;
+namespace Database\Seeders;
 
 use Database\Factories\CartFactory;
 use Illuminate\Database\Seeder;

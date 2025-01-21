@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('ccns-ecommerce-cart::layouts.app')
 
 @section('content')
     <h1>Your Cart</h1>
 
-    @if($cartItems->isEmpty())
+    @if($cartObjects->isEmpty())
         <p>Your cart is empty!</p>
     @else
         <table>
@@ -17,14 +17,14 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($cartItems as $item)
+            @foreach($cartData as $item)
                 <tr>
-                    <td>{{ $item->product->name }}</td>
+                    <td>{{ $item->product_id }}</td>
                     <td>{{ $item->quantity }}</td>
-                    <td>{{ $item->product->price }}</td>
-                    <td>{{ $item->quantity * $item->product->price }}</td>
+                    <td>{{ $item->price }}</td>
+                    <td>{{ $item->quantity * $item->price }}</td>
                     <td>
-                        <form action="{{ route('cart.remove', $item->id) }}" method="POST">
+                        <form action="{{ route('cart.destroy', $item->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit">Remove</button>
@@ -33,8 +33,21 @@
                 </tr>
             @endforeach
             </tbody>
+            <tfoot>
+            <tr>
+                <td>
+                    <div class="cart-summary">
+                        <p><strong>Subtotal:</strong> {{ number_format($cartSummary['subtotal'], 2) }} บาท</p>
+                        <p><strong>Discount:</strong> {{ number_format($cartSummary['discount'], 2) }} บาท</p>
+                        <p><strong>Shipping:</strong> {{ number_format($cartSummary['shipping'], 2) }} บาท</p>
+                        <p><strong>Total:</strong> {{ number_format($cartSummary['total'], 2) }} บาท</p>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
         </table>
 
-        <a href="{{ route('checkout') }}">Checkout</a>
+        {{ $cartObjects->links() }}
+
     @endif
 @endsection

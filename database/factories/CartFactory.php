@@ -1,11 +1,9 @@
 <?php
 
-namespace database\factories;
+namespace Database\Factories;
 
-use App\Models\User;
 use Ccns\CcnsEcommerceCart\Models\Cart;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class CartFactory extends Factory
 {

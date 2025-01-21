@@ -12,13 +12,18 @@
     ],
     "require-dev": {
         "php": "^8.2",
-        "illuminate/support": "^10.0",
-        "laravel/framework": "^v11.0.0",
-        "laravel/tinker": "^2.9"
+        "illuminate/support": "^v11.0",
+        "illuminate/database": "^v11.0",
+        "symfony/console": "^7.0",
+        "orchestra/testbench": "^9.0",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^10.4"
     },
     "autoload": {
         "psr-4": {
-            "Ccns\\CcnsEcommerceCart\\": "src/"
+            "Ccns\\CcnsEcommerceCart\\": "src/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
