@@ -29,16 +29,4 @@ class CartCollection extends ResourceCollection
             ],
         ];
     }
-
-    public function with($request): array
-    {
-        return [
-            'summary' => [
-                'subtotal' => $this->collection->sum(fn ($item) => $item->price * $item->quantity),
-                'discount' => $this->collection->sum(fn ($item) => $item->discount_amount ?? 0),
-                'shipping' => $this->collection->sum(fn ($item) => $item->shipping_amount ?? 0),
-                'total' => $this->collection->sum(fn ($item) => $item->price * $item->quantity - ($item->discount_amount ?? 0)),
-            ],
-        ];
-    }
 }

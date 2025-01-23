@@ -4,7 +4,6 @@ namespace Ccns\CcnsEcommerceCart\Http\Controller;
 
 use App\Http\Controllers\Controller;
 use Ccns\CcnsEcommerceCart\Http\Resources\CartCollection;
-use Ccns\CcnsEcommerceCart\Http\Resources\CartResource;
 use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Ccns\CcnsEcommerceCart\Facades\Cart as CartFacade;
 use Ccns\CcnsEcommerceCart\Http\Requests\StoreCartRequest;

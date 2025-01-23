@@ -46,7 +46,6 @@ class Cart implements CartContract
 
     public function clear(): bool
     {
-        $this->items = [];
-        return true;
+        return CartModel::where('user_id', 1)->delete();
     }
 }
