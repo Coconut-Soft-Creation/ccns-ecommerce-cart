@@ -24,7 +24,6 @@ class UpdateCartRequest extends FormRequest
     {
         return [
             'id' => ['integer', 'exists:carts,id'],
-            'price' => ['integer'],
             'quantity' => ['integer', 'min:1'],
         ];
     }

@@ -6,7 +6,7 @@
         <div class="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
             <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Shopping Cart</h1>
 
-            @if($cartObjects->isEmpty())
+            @if($cart['data']->isEmpty())
                 <p>Your cart is empty!</p>
             @else
 
@@ -15,7 +15,7 @@
                     <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
 
                     <ul role="list" class="divide-y divide-gray-200 border-b border-t border-gray-200">
-                    @foreach($cartData as $item)
+                    @foreach($cart['data'] as $item)
                         <li class="flex py-6 sm:py-10">
                             <div class="shrink-0">
                                 <img src="https://placehold.co/400x400" alt="" class="size-24 rounded-md object-cover sm:size-48">
@@ -26,7 +26,7 @@
                                     <div>
                                         <div class="flex justify-between">
                                             <h3 class="text-sm">
-                                                <a href="#" class="font-medium text-gray-700 hover:text-gray-800">{{ $item->product_id }}</a>
+                                                <a href="#" class="font-medium text-gray-700 hover:text-gray-800">รหัส {{ $item->product_id }}</a>
                                             </h3>
                                         </div>
                                         <div class="mt-1 flex text-sm">
@@ -38,7 +38,7 @@
 
                                     <div class="mt-4 sm:mt-0 sm:pr-9">
                                         <div class="grid w-full max-w-16 grid-cols-1">
-                                            <p class="mt-1 text-sm font-medium text-gray-900">{{ $item->quantity }}</p>
+                                            <p class="mt-1 text-sm font-medium text-gray-900">จำนวน {{ $item->quantity }}</p>
                                         </div>
 
                                         <div class="absolute right-0 top-0">
@@ -53,7 +53,7 @@
                                 </div>
 
                                 <p class="mt-4 flex space-x-2 text-sm text-gray-700">
-                                    <span>{{ $item->total_price }}</span>
+                                    <span>รวม {{ $item->total_price }}</span>
                                 </p>
                             </div>
                         </li>
@@ -69,7 +69,7 @@
                     <dl class="mt-6 space-y-4">
                         <div class="flex items-center justify-between">
                             <dt class="text-sm text-gray-600">Subtotal</dt>
-                            <dd class="text-sm font-medium text-gray-900">{{ number_format($cartSummary['subtotal'], 2) }}</dd>
+                            <dd class="text-sm font-medium text-gray-900">{{ number_format($cart['summary']['subtotal'], 2) }}</dd>
                         </div>
                         <div class="flex items-center justify-between border-t border-gray-200 pt-4">
                             <dt class="flex items-center text-sm text-gray-600">
@@ -81,7 +81,7 @@
                                     </svg>
                                 </a>
                             </dt>
-                            <dd class="text-sm font-medium text-gray-900">{{ number_format($cartSummary['shipping'], 2) }}</dd>
+                            <dd class="text-sm font-medium text-gray-900">{{ number_format($cart['summary']['shipping'], 2) }}</dd>
                         </div>
                         <div class="flex items-center justify-between border-t border-gray-200 pt-4">
                             <dt class="flex text-sm text-gray-600">
@@ -93,11 +93,11 @@
                                     </svg>
                                 </a>
                             </dt>
-                            <dd class="text-sm font-medium text-gray-900">{{ number_format($cartSummary['discount'], 2) }}</dd>
+                            <dd class="text-sm font-medium text-gray-900">{{ number_format($cart['summary']['discount'], 2) }}</dd>
                         </div>
                         <div class="flex items-center justify-between border-t border-gray-200 pt-4">
                             <dt class="text-base font-medium text-gray-900">Order total</dt>
-                            <dd class="text-base font-medium text-gray-900">{{ number_format($cartSummary['total'], 2) }}</dd>
+                            <dd class="text-base font-medium text-gray-900">{{ number_format($cart['summary']['total'], 2) }}</dd>
                         </div>
                     </dl>
 

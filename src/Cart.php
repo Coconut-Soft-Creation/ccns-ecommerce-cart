@@ -2,50 +2,71 @@
 
 namespace Ccns\CcnsEcommerceCart;
 
-use Ccns\CcnsEcommerceCart\Contracts\Cart as CartContract;
 use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Ccns\CcnsEcommerceCart\Contracts\Cart as CartContract;
+use Ccns\CcnsEcommerceCart\Http\Requests\StoreCartRequest;
+use Ccns\CcnsEcommerceCart\Http\Requests\UpdateCartRequest;
+use Ccns\CcnsEcommerceCart\Http\Resources\CartCollection;
+use Illuminate\Support\Facades\Auth;
 
+/**
+ *
+ */
 class Cart implements CartContract
 {
-    protected array $items = [];
-
-    public function getItems(): LengthAwarePaginator
+    /**
+     * @return array
+     */
+    public function getItems(): array
     {
-        return CartModel::where('user_id', 1)->paginate(5);
+        $carts = CartModel::where('user_id', Auth::user()->id)->get();
+        $cartObjects = new CartCollection($carts);
+
+        return $cartItems = $cartObjects->toArray(request());
     }
 
-    public function addItem(string $itemId, int $quantity = 1, array $options = []): bool
+    /**
+     * @param StoreCartRequest $request
+     * @return CartModel
+     */
+    public function addItem(StoreCartRequest $request): CartModel
     {
-        $itemId = rand(1, 999999);
-        $price = rand(10, 999);
-
         $product = array_rand([
-            'user_id' => 1,
-            'product_id' => $itemId,
-            'options' => $options,
-            'price' => $price,
-            'quantity' => $quantity,
-            'total_price' => $quantity * $price,
+            'user_id' => Auth::user()->id,
+            'product_id' => $request->product_id ?? null,
+            'options' => $request->option ?? [],
+            'price' => $request->price ?? 0,
+            'quantity' => $request->quantity ?? 1,
+            'total_price' => $request->quantity * $request->price
         ]);
 
-        CartModel::updateOrCreate(['product_id' => $itemId], $product);
-
-        return true;
+        return CartModel::updateOrCreate([
+            'product_id' => $request->product_id,
+            'user_id' => Auth::user()->id,
+        ], $product);
     }
 
-    public function updateItem(string $itemId, int $quantity): bool
+    /**
+     * @param UpdateCartRequest $request
+     * @param CartModel $cart
+     * @return bool
+     */
+    public function updateItem(UpdateCartRequest $request, CartModel $cart): bool
     {
-        return CartModel::where('product_id', $itemId)->where('user_id', 1)->update(['quantity' => $quantity]);
+        return CartModel::where('id', $cart->id)
+            ->where('user_id', Auth::user()->id)
+            ->update(['quantity' => $request->quantity]);
     }
 
-    public function removeItem(string $itemId): bool
+    public function removeItem(CartModel $cart): bool
     {
-        return CartModel::where('product_id', $itemId)->where('user_id', 1)->delete();
+        return CartModel::where('id', $cart->id)
+            ->where('user_id', Auth::user()->id)
+            ->delete();
     }
 
     public function clear(): bool
     {
-        return CartModel::where('user_id', 1)->delete();
+        return CartModel::where('user_id', Auth::user()->id)->delete();
     }
 }

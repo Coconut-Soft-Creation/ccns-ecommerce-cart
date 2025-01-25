@@ -3,7 +3,7 @@
 namespace Ccns\CcnsEcommerceCart\Tests\Unit;
 
 use Ccns\CcnsEcommerceCart\Cart;
-use tests\TestCase;
+use Orchestra\Testbench\PHPUnit\TestCase;
 
 class CartTest extends TestCase
 {
@@ -14,16 +14,42 @@ class CartTest extends TestCase
 
     public function test_add_item()
     {
-        $cart = new Cart();
-        $cart->addItem(1, 1, ['name' => 'Test Item']);
+        $product_id = rand(1, 999999);
+        $price = rand(10, 999);
+        $quantity = rand(1, 10);
+
+        $product = array_rand([
+            'user_id' => 1,
+            'product_id' => $product_id,
+            'options' => [],
+            'price' => $price,
+            'quantity' => $quantity,
+            'total_price' => $quantity * $price,
+        ]);
+
+        Cart::addItem($product);
 
         $this->assertArrayHasKey(1, $cart->getItems());
     }
 
     public function test_remove_item()
     {
+        $product_id = rand(1, 999999);
+        $price = rand(10, 999);
+        $quantity = rand(1, 10);
+
+        $product = array_rand([
+            'user_id' => 1,
+            'product_id' => $product_id,
+            'options' => [],
+            'price' => $price,
+            'quantity' => $quantity,
+            'total_price' => $quantity * $price,
+        ]);
+        Cart::addItem($product);
+
         $cart = new Cart();
-        $cart->addItem(1, 1, ['name' => 'Test Item']);
+        $cart->addItem($product);
         $cart->removeItem(1);
 
         $this->assertEmpty($cart->getItems());
