@@ -8,18 +8,14 @@ use Illuminate\View\Component;
 
 class Cart extends Component
 {
-    public array $data = [];
-    public array $summary = [];
+    public array $cart = [];
 
     /**
      * Create a new component instance.
-     * @param array $data
-     * @param array $summary
      */
-    public function __construct(array $data = [], array $summary = [])
+    public function __construct(array $cart = [])
     {
-        $this->data = $data;
-        $this->summary = $summary;
+        $this->cart = $cart;
     }
 
     /**

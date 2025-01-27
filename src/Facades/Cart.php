@@ -2,9 +2,9 @@
 
 namespace Ccns\CcnsEcommerceCart\Facades;
 
-use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Ccns\CcnsEcommerceCart\Http\Requests\StoreCartRequest;
 use Ccns\CcnsEcommerceCart\Http\Requests\UpdateCartRequest;
+use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Illuminate\Support\Facades\Facade;
 
 /**

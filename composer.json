@@ -12,19 +12,19 @@
     ],
     "require-dev": {
         "php": "^8.2",
-        "illuminate/support": "^v11.0",
-        "orchestra/testbench": "^9.9"
+        "phpstan/phpstan": "^2.1",
+        "laravel/pint": "^1.20"
     },
     "autoload": {
         "psr-4": {
-            "Ccns\\CcnsEcommerceCart\\": "src/",
-            "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Ccns\\CcnsEcommerceCart\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Ccns\\CcnsEcommerceCart\\Tests\\": "tests/"
+            "Tests\\": "tests",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "extra": {

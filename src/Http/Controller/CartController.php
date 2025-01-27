@@ -2,13 +2,13 @@
 
 namespace Ccns\CcnsEcommerceCart\Http\Controller;
 
-use App\Http\Controllers\Controller;
-use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Ccns\CcnsEcommerceCart\Facades\Cart as CartFacade;
 use Ccns\CcnsEcommerceCart\Http\Requests\StoreCartRequest;
 use Ccns\CcnsEcommerceCart\Http\Requests\UpdateCartRequest;
+use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controller;
 
 class CartController extends Controller
 {
