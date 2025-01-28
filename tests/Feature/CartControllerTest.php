@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use Database\Factories\UserFactory;
+use App\Models\User;
 use Faker\Factory;
 use Tests\TestCase;
 
@@ -10,7 +10,7 @@ class CartControllerTest extends TestCase
 {
     public function test_user_can_add_product_to_cart(): void
     {
-        $user = UserFactory::create();
+        $user = User::factory()->create();
         $faker = Factory::create();
         $product = [
             'id' => $faker->uuid,
