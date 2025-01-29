@@ -17,12 +17,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Ccns\\CcnsEcommerceCart\\": "src/"
+            "Ccns\\CcnsEcommerceCart\\": "src/",
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests",
+            "Ccns\\CcnsEcommerceCart\\Tests\\": "tests",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }

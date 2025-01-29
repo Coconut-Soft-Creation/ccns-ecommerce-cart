@@ -2,16 +2,16 @@
 
 namespace Ccns\CcnsEcommerceCart\Models;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
 
 class Cart extends Model
 {
-    use HasFactory, SoftDeletes;
-
-    protected $primaryKey = 'id';
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $keyType = 'string';
 
@@ -32,10 +32,8 @@ class Cart extends Model
         'options' => 'array',
     ];
 
-    protected static function booted(): void
+    public function user(): BelongsTo
     {
-        static::creating(function ($model) {
-            $model->id = Str::uuid();
-        });
+        return $this->belongsTo(User::class);
     }
 }

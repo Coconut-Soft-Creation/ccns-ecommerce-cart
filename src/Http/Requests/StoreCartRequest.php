@@ -12,7 +12,7 @@ class StoreCartRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -27,5 +27,12 @@ class StoreCartRequest extends FormRequest
             'price' => ['integer', 'required'],
             'quantity' => ['integer', 'min:1', 'max:99', 'required'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        return $this->merge([
+            'user_id' => auth()->id(),
+        ]);
     }
 }

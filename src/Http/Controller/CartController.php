@@ -8,6 +8,7 @@ use Ccns\CcnsEcommerceCart\Http\Requests\UpdateCartRequest;
 use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class CartController extends Controller
@@ -15,9 +16,9 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $cart = CartFacade::getItems();
+        $cart = CartFacade::getItems($request);
 
         return view('ccns-ecommerce-cart::cart-index', compact('cart'));
     }
@@ -51,5 +52,12 @@ class CartController extends Controller
         CartFacade::removeItem($cart);
 
         return redirect()->route('cart.index')->with('success', 'Product deleted!');
+    }
+
+    public function destroyAll(): RedirectResponse
+    {
+        CartFacade::clear();
+
+        return redirect()->route('cart.index')->with('success', 'All products deleted!');
     }
 }

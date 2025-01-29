@@ -8,20 +8,23 @@ use Illuminate\Support\ServiceProvider;
 
 class InstallCommand extends Command implements PromptsForMissingInput
 {
-    protected $signature = 'ccns-ecommerce-cart:install { --no-migrate : Do not run migrate along with this installation.};}
-                                                        { --no-seed : Do not run seed along with this installation.}';
+    protected $signature = 'ccns-ecommerce-cart:install { --with-files : Publishes all files along with this installation. }
+                                                        { --with-migrations : Run migrations along with this installation. }
+                                                        { --with-seeders : Run seeders along with this installation. }';
 
     protected $description = 'Install the CcnsEcommerceCart components and resources';
 
     public function handle(): void
     {
-        $this->publishFiles();
+        if (! $this->option('with-files')) {
+            $this->publishFiles();
+        }
 
-        if ( ! $this->option('no-migrate')) {
+        if (! $this->option('with-migrations')) {
             $this->runMigrations();
         }
 
-        if ( ! $this->option('no-seed')) {
+        if (! $this->option('with-seeders')) {
             $this->runSeeders();
         }
 
@@ -32,14 +35,18 @@ class InstallCommand extends Command implements PromptsForMissingInput
 
     protected function publishFiles(): void
     {
-        $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-assets', '--force' => true]);
-        $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-config', '--force' => true]);
-        $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-translations', '--force' => true]);
-        $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-views', '--force' => true]);
-        $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-factories', '--force' => true]);
-        $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-migrations', '--force' => true]);
-        $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-seeders', '--force' => true]);
-        $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-tests', '--force' => true]);
+        if ($this->confirm('Do you want to publishes all files?')) {
+            $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-assets', '--force' => true]);
+            $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-config', '--force' => true]);
+            $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-translations', '--force' => true]);
+            $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-views', '--force' => true]);
+            $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-factories', '--force' => true]);
+            $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-migrations', '--force' => true]);
+            $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-seeders', '--force' => true]);
+            $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-tests', '--force' => true]);
+        }
+
+        $this->line('CcnsEcommerceCart publishes files successfully.');
     }
 
     protected function runMigrations(): void

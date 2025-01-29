@@ -4,7 +4,10 @@ namespace Ccns\CcnsEcommerceCart;
 
 use Ccns\CcnsEcommerceCart\Cart as CartService;
 use Ccns\CcnsEcommerceCart\Console\InstallCommand;
+use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
+use Ccns\CcnsEcommerceCart\Policies\CartPolicy;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class CartServiceProvider extends ServiceProvider
@@ -21,6 +24,8 @@ class CartServiceProvider extends ServiceProvider
     {
         $this->loadComponents();
         $this->publishComponents();
+
+        //        Gate::policy(CartModel::class, CartPolicy::class);
     }
 
     protected function registerBindings(): void
@@ -71,7 +76,7 @@ class CartServiceProvider extends ServiceProvider
         ], 'ccns-ecommerce-cart-assets');
 
         $this->publishes([
-            __DIR__.'/../database/factories/' => database_path('factories'),
+            __DIR__.'/../database/factories' => database_path('factories'),
         ], 'ccns-ecommerce-cart-factories');
 
         $this->publishes([
@@ -79,7 +84,7 @@ class CartServiceProvider extends ServiceProvider
         ], 'ccns-ecommerce-cart-migrations');
 
         $this->publishes([
-            __DIR__.'/../database/seeders/' => database_path('seeders'),
+            __DIR__.'/../database/seeders' => database_path('seeders'),
         ], 'ccns-ecommerce-cart-seeders');
 
         $this->publishes([
