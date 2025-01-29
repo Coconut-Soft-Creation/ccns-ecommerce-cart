@@ -16,7 +16,6 @@ class CartFactory extends Factory
         $price = $this->faker->randomNumber();
 
         return [
-            'id' => $this->faker->uuid,
             'user_id' => User::factory(),
             'product' => [
                 'id' => $this->faker->uuid,

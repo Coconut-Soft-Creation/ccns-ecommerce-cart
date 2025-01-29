@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static addItem(StoreCartRequest $request)
  * @method static updateItem(UpdateCartRequest $request, CartModel $cart)
  * @method static removeItem(CartModel $cart)
- * @method static clear()
  */
 class Cart extends Facade
 {

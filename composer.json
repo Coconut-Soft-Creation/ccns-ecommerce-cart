@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Ccns\\CcnsEcommerceCart\\": "src/",
+            "Ccns\\CcnsEcommerceCart\\": "src/"
         }
     },
     "autoload-dev": {

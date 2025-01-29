@@ -11,11 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cart extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes;
-
-    protected $keyType = 'string';
-
-    public $incrementing = false;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'id',

@@ -40,7 +40,7 @@ class CartController extends Controller
     {
         CartFacade::updateItem($request, $cart);
 
-        return redirect()->route('cart.index')->with('success', 'Cart updated!');
+        return redirect()->route('cart.index')->with('success', 'Product updated to cart!');
 
     }
 
@@ -51,13 +51,6 @@ class CartController extends Controller
     {
         CartFacade::removeItem($cart);
 
-        return redirect()->route('cart.index')->with('success', 'Product deleted!');
-    }
-
-    public function destroyAll(): RedirectResponse
-    {
-        CartFacade::clear();
-
-        return redirect()->route('cart.index')->with('success', 'All products deleted!');
+        return redirect()->route('cart.index')->with('success', 'Product deleted from cart!');
     }
 }

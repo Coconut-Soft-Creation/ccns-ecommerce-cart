@@ -98,6 +98,7 @@ class CartServiceProvider extends ServiceProvider
         ], 'ccns-ecommerce-cart-routes');
 
         $this->publishes([
+            __DIR__.'/../tests/CartTestCase.php' => base_path('tests/CartTestCase.php'),
             __DIR__.'/../tests/Unit' => base_path('tests/Unit'),
             __DIR__.'/../tests/Feature' => base_path('tests/Feature'),
         ], 'ccns-ecommerce-cart-tests');

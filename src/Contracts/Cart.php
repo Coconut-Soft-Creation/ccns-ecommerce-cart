@@ -27,9 +27,4 @@ interface Cart
      * Remove an item from the cart.
      */
     public function removeItem(CartModel $cart): bool;
-
-    /**
-     * Clear all items in the cart.
-     */
-    public function clear(): bool;
 }

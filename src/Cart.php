@@ -21,8 +21,8 @@ class Cart implements CartContract
     public function addItem(StoreCartRequest $request): CartModel
     {
         return CartModel::updateOrCreate([
-            'product' => json_encode($request->product),
             'user_id' => $request->user()->id,
+            'product->id' => $request->product['id'],
         ], [
             'product' => $request->product ?? [],
             'options' => $request->option ?? [],
@@ -44,10 +44,5 @@ class Cart implements CartContract
         return CartModel::where('id', $cart->id)
             ->where('user_id', request()->user()->id)
             ->delete();
-    }
-
-    public function clear(): bool
-    {
-        return CartModel::where('user_id', request()->user()->id)->delete();
     }
 }
