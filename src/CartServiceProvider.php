@@ -3,8 +3,8 @@
 namespace Ccns\CcnsEcommerceCart;
 
 use Ccns\CcnsEcommerceCart\Cart as CartService;
-use Ccns\CcnsEcommerceCart\Console\InstallCommand;
 use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
+use Ccns\CcnsEcommerceCart\Console\InstallCommand;
 use Ccns\CcnsEcommerceCart\Policies\CartPolicy;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
@@ -24,8 +24,6 @@ class CartServiceProvider extends ServiceProvider
     {
         $this->loadComponents();
         $this->publishComponents();
-
-        //        Gate::policy(CartModel::class, CartPolicy::class);
     }
 
     protected function registerBindings(): void
@@ -98,9 +96,9 @@ class CartServiceProvider extends ServiceProvider
         ], 'ccns-ecommerce-cart-routes');
 
         $this->publishes([
-            __DIR__.'/../tests/CartTestCase.php' => base_path('tests/CartTestCase.php'),
-            __DIR__.'/../tests/Unit' => base_path('tests/Unit'),
-            __DIR__.'/../tests/Feature' => base_path('tests/Feature'),
+            __DIR__.'/../stubs/tests/CartTestCase.php' => base_path('tests/CartTestCase.php'),
+            __DIR__.'/../stubs/tests/Unit' => base_path('tests/Unit'),
+            __DIR__.'/../stubs/tests/Feature' => base_path('tests/Feature'),
         ], 'ccns-ecommerce-cart-tests');
     }
 

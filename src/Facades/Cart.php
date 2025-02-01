@@ -4,14 +4,13 @@ namespace Ccns\CcnsEcommerceCart\Facades;
 
 use Ccns\CcnsEcommerceCart\Http\Requests\StoreCartRequest;
 use Ccns\CcnsEcommerceCart\Http\Requests\UpdateCartRequest;
-use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static getItems()
  * @method static addItem(StoreCartRequest $request)
- * @method static updateItem(UpdateCartRequest $request, CartModel $cart)
- * @method static removeItem(CartModel $cart)
+ * @method static updateItem(UpdateCartRequest $request, string $cartId)
+ * @method static removeItem(string $cartId)
  */
 class Cart extends Facade
 {

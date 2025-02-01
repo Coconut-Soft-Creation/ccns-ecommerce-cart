@@ -21,10 +21,10 @@ interface Cart
     /**
      * Update the quantity of an item in the cart.
      */
-    public function updateItem(UpdateCartRequest $request, CartModel $cart): bool;
+    public function updateItem(UpdateCartRequest $request, string $cartId): bool;
 
     /**
      * Remove an item from the cart.
      */
-    public function removeItem(CartModel $cart): bool;
+    public function removeItem(string $cartId): bool;
 }

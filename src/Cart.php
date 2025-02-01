@@ -21,7 +21,7 @@ class Cart implements CartContract
     public function addItem(StoreCartRequest $request): CartModel
     {
         return CartModel::updateOrCreate([
-            'user_id' => $request->user()->id,
+            'user_id' => request()->user()->id,
             'product->id' => $request->product['id'],
         ], [
             'product' => $request->product ?? [],
@@ -32,16 +32,16 @@ class Cart implements CartContract
         ]);
     }
 
-    public function updateItem(UpdateCartRequest $request, CartModel $cart): bool
+    public function updateItem(UpdateCartRequest $request, string $cartId): bool
     {
-        return CartModel::where('id', $cart->id)
+        return CartModel::where('id', $cartId)
             ->where('user_id', request()->user()->id)
             ->update(['quantity' => $request->quantity]);
     }
 
-    public function removeItem(CartModel $cart): bool
+    public function removeItem(string $cartId): bool
     {
-        return CartModel::where('id', $cart->id)
+        return CartModel::where('id', $cartId)
             ->where('user_id', request()->user()->id)
             ->delete();
     }

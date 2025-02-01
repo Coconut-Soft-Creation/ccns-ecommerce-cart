@@ -7,17 +7,24 @@ use Ccns\CcnsEcommerceCart\Http\Requests\StoreCartRequest;
 use Ccns\CcnsEcommerceCart\Http\Requests\UpdateCartRequest;
 use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 
 class CartController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): View
     {
+        $this->authorize('viewAny', CartModel::class);
+
         $cart = CartFacade::getItems($request);
 
         return view('ccns-ecommerce-cart::cart-index', compact('cart'));
@@ -28,6 +35,8 @@ class CartController extends Controller
      */
     public function store(StoreCartRequest $request): RedirectResponse
     {
+        $this->authorize('create', CartModel::class);
+
         CartFacade::addItem($request);
 
         return redirect()->route('cart.index')->with('success', 'Product added to cart!');
@@ -36,9 +45,11 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCartRequest $request, CartModel $cart): RedirectResponse
+    public function update(UpdateCartRequest $request, string $cartId): RedirectResponse
     {
-        CartFacade::updateItem($request, $cart);
+        $this->authorize('update', CartModel::findOrFail($cartId));
+
+        CartFacade::updateItem($request, $cartId);
 
         return redirect()->route('cart.index')->with('success', 'Product updated to cart!');
 
@@ -47,9 +58,11 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CartModel $cart): RedirectResponse
+    public function destroy(string $cartId): RedirectResponse
     {
-        CartFacade::removeItem($cart);
+        $this->authorize('delete', CartModel::findOrFail($cartId));
+
+        CartFacade::removeItem($cartId);
 
         return redirect()->route('cart.index')->with('success', 'Product deleted from cart!');
     }

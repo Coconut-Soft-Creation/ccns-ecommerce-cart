@@ -10,19 +10,14 @@ class CartPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(): bool
+    public function viewAny(?User $user): bool
     {
-        return false;
+        return !($user === null);
     }
 
-    public function view(User $user, Cart $cart): bool
+    public function create(?User $user): bool
     {
-        return $user->id === $cart->user_id;
-    }
-
-    public function create(User $user): bool
-    {
-        return true;
+        return !($user === null);
     }
 
     public function update(User $user, Cart $cart): bool
@@ -31,16 +26,6 @@ class CartPolicy
     }
 
     public function delete(User $user, Cart $cart): bool
-    {
-        return $user->id === $cart->user_id;
-    }
-
-    public function restore(User $user, Cart $cart): bool
-    {
-        return $user->id === $cart->user_id;
-    }
-
-    public function forceDelete(User $user, Cart $cart): bool
     {
         return $user->id === $cart->user_id;
     }

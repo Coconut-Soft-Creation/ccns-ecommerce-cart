@@ -70,10 +70,10 @@ class InstallCommand extends Command implements PromptsForMissingInput
         if ($this->confirm('Do you want to run seeders?')) {
             $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-factories', '--force' => true]);
             $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-seeders', '--force' => true]);
-            $this->call('vendor:publish', ['--tag' => 'ccns-ecommerce-cart-tests', '--force' => true]);
             $this->call('db:seed', ['--class' => 'CartSeeder', '--force' => true]);
 
             $this->line('CcnsEcommerceCart seeders successfully.');
         }
     }
+
 }
