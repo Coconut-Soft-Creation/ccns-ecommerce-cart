@@ -12,12 +12,12 @@ class CartPolicy
 
     public function viewAny(?User $user): bool
     {
-        return !($user === null);
+        return ! ($user === null);
     }
 
     public function create(?User $user): bool
     {
-        return !($user === null);
+        return ! ($user === null);
     }
 
     public function update(User $user, Cart $cart): bool

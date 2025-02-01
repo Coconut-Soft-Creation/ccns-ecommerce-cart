@@ -75,5 +75,4 @@ class InstallCommand extends Command implements PromptsForMissingInput
             $this->line('CcnsEcommerceCart seeders successfully.');
         }
     }
-
 }

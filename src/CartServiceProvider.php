@@ -3,11 +3,8 @@
 namespace Ccns\CcnsEcommerceCart;
 
 use Ccns\CcnsEcommerceCart\Cart as CartService;
-use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Ccns\CcnsEcommerceCart\Console\InstallCommand;
-use Ccns\CcnsEcommerceCart\Policies\CartPolicy;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class CartServiceProvider extends ServiceProvider
