@@ -12,9 +12,8 @@
     ],
     "require-dev": {
         "php": "^8.2",
-        "illuminate/support": "^10.0",
-        "laravel/framework": "^v11.0.0",
-        "laravel/tinker": "^2.9"
+        "phpstan/phpstan": "^2.1",
+        "laravel/pint": "^1.20"
     },
     "autoload": {
         "psr-4": {
@@ -23,7 +22,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Ccns\\CcnsEcommerceCart\\Tests\\": "tests/"
+            "Ccns\\CcnsEcommerceCart\\Tests\\": "tests",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "extra": {
