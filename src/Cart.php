@@ -10,6 +10,8 @@ use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 
 class Cart implements CartContract
 {
+    protected $cart;
+
     public function getItems(): array
     {
         $carts = CartModel::where('user_id', request()->user()->id)->get();
