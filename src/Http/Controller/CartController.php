@@ -5,6 +5,7 @@ namespace Ccns\CcnsEcommerceCart\Http\Controller;
 use Ccns\CcnsEcommerceCart\Facades\Cart as CartFacade;
 use Ccns\CcnsEcommerceCart\Http\Requests\StoreCartRequest;
 use Ccns\CcnsEcommerceCart\Http\Requests\UpdateCartRequest;
+use Ccns\CcnsEcommerceCart\Http\Resources\CartCollection;
 use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -23,7 +24,9 @@ class CartController extends Controller
     {
         $this->authorize('viewAny', CartModel::class);
 
-        $cart = CartFacade::getItems($request);
+        $cartResults = CartFacade::getCart($request);
+        $cartObjects = new CartCollection($cartResults);
+        $cart = $cartResults->toArray(request());
 
         return view('ccns-ecommerce-cart::cart-index', compact('cart'));
     }
@@ -35,7 +38,7 @@ class CartController extends Controller
     {
         $this->authorize('create', CartModel::class);
 
-        CartFacade::addItem($request);
+        CartFacade::addItem($request->toArray());
 
         return redirect()->route('cart.index')->with('success', 'Product added to cart!');
     }

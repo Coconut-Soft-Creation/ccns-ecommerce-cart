@@ -2,15 +2,21 @@
 
 namespace Ccns\CcnsEcommerceCart\Contracts;
 
+use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
+
 interface CartStorageContract
 {
-    public function has(string $key): bool;
+    public function hasCart(): bool;
 
-    public function get(string $key);
+    public function makeCart(): CartModel;
 
-    public function set(string $key, $value): void;
+    public function getCart(): CartModel;
 
-    public function remove(string $key): void;
+    public function addItem(array $request): void;
 
-    public function clear(): void;
+    public function editItem(array $request, string $cartId): void;
+
+    public function removeItem(string $cartId): void;
+
+    public function clearCart(): void;
 }

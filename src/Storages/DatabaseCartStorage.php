@@ -3,52 +3,69 @@
 namespace Ccns\CcnsEcommerceCart\Storages;
 
 use Ccns\CcnsEcommerceCart\Contracts\CartStorageContract;
+use Ccns\CcnsEcommerceCart\Http\Resources\CartCollection;
+use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
 
 class DatabaseCartStorage implements CartStorageContract
 {
-
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public function has(string $key): bool
+    public function hasCart(): bool
     {
-        // TODO: Implement has() method.
+        return CartModel::where(['user_id' => request()->user()->id])
+            ->orWhere(['session_id' => request()->session()->getId()])
+            ->exists();
+    }
+
+    public function makeCart(): CartModel
+    {
+        return auth()->check()
+            ? CartModel::create(['user_id' => request()->user()->id])
+            : CartModel::create(['session_id' => request()->session()->getId()]);
+    }
+
+    public function getCart(): CartModel
+    {
+        $cartModel = CartModel::with('items');
+
+        return auth()->check()
+            ? $cartModel->where(['user_id' => request()->user()->id])->first()
+            : $cartModel->where(['session_id' => request()->session()->getId()])->first();
     }
 
     /**
-     * @param string $key
-     * @return mixed
-     */
-    public function get(string $key)
-    {
-        // TODO: Implement get() method.
-    }
-
-    /**
-     * @param string $key
-     * @param $value
+     * @param array $request
      * @return void
      */
-    public function set(string $key, $value): void
+    public function addItem(array $request): void
     {
-        // TODO: Implement set() method.
+        $cart = $this->getCart();
+
+        $cart->items()->updateOrCreate(
+            ['product_id' => $request['product_id']],
+            []
+        );
     }
 
     /**
-     * @param string $key
+     * @param array $request
+     * @param string $cartId
      * @return void
      */
-    public function remove(string $key): void
+    public function editItem(array $request, string $cartId): void
     {
-        // TODO: Implement remove() method.
+    }
+
+    /**
+     * @param string $cartId
+     * @return bool|null
+     */
+    public function removeItem(string $cartId): ?bool
+    {
     }
 
     /**
      * @return void
      */
-    public function clear(): void
+    public function clearCart(): void
     {
-        // TODO: Implement clear() method.
     }
 }

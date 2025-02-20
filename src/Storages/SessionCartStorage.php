@@ -8,10 +8,10 @@ class SessionCartStorage implements CartStorageContract
 {
 
     /**
-     * @param string $key
+     * @param string $userId
      * @return bool
      */
-    public function has(string $key): bool
+    public function has(string $userId): bool
     {
         // TODO: Implement has() method.
     }
