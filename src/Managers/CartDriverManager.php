@@ -15,7 +15,7 @@ use InvalidArgumentException;
 class CartDriverManager
 {
     protected static array $supportedDrivers = [
-        'database', 'redis', 'session', 'file', 'array'
+        'database', 'redis', 'session', 'file', 'array',
     ];
 
     public static function isSupported(string $driver): bool
@@ -25,16 +25,16 @@ class CartDriverManager
 
     public static function createDriver(string $driver): ArrayCartStorage|DatabaseCartStorage|FileCartStorage|RedisCartStorage|SessionCartStorage
     {
-        if (!self::isSupported($driver)) {
+        if (! self::isSupported($driver)) {
             throw new InvalidArgumentException("Unsupported cart driver: {$driver}");
         }
 
         return match ($driver) {
             'database' => new DatabaseCartStorage(app(Connection::class)),
             'redis' => new RedisCartStorage(app(Cache::class)),
-            'session' => new SessionCartStorage(),
+            'session' => new SessionCartStorage,
             'file' => new FileCartStorage(app(Filesystem::class)),
-            'array' => new ArrayCartStorage(),
+            'array' => new ArrayCartStorage,
         };
     }
 }

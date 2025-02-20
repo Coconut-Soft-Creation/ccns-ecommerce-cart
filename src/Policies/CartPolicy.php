@@ -15,18 +15,8 @@ class CartPolicy
         return ! ($user === null);
     }
 
-    public function create(?User $user): bool
-    {
-        return ! ($user === null);
-    }
-
-    public function update(User $user, Cart $cart): bool
-    {
-        return $user->id === $cart->user_id;
-    }
-
     public function delete(User $user, Cart $cart): bool
     {
-        return $user->id === $cart->user_id;
+        return $user->id === $cart->user_id && $cart->items()->count() !== 0;
     }
 }

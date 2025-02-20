@@ -12,7 +12,6 @@ return new class extends Migration
             $table->index('id');
             $table->index('user_id');
             $table->string('session_id')->nullable()->index();
-            $table->decimal('total_price', 10, 2)->default(0);
 
             $table->dropColumn('product');
             $table->dropColumn('options');

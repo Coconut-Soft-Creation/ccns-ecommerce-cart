@@ -3,6 +3,7 @@
 namespace Ccns\CcnsEcommerceCart\Contracts;
 
 use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
+use Ccns\CcnsEcommerceCart\Models\CartItem as CartItemModel;
 
 interface CartStorageContract
 {
@@ -12,11 +13,17 @@ interface CartStorageContract
 
     public function getCart(): CartModel;
 
-    public function addItem(array $request): void;
+    public function hasItem(string $itemId): bool;
 
-    public function editItem(array $request, string $cartId): void;
+    public function getItem(string $itemId): CartItemModel;
 
-    public function removeItem(string $cartId): void;
+    public function addItem(array $request): bool;
 
-    public function clearCart(): void;
+    public function editItem(array $request, string $cartItemId): bool;
+
+    public function removeItem(string $cartItemId): bool;
+
+    public function clearCart(): bool;
+
+    public function calculateTotalPrice(CartModel $cartModel): bool;
 }

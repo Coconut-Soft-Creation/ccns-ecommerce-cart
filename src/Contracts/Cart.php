@@ -7,12 +7,12 @@ interface Cart
     /**
      * Get all items in the cart.
      */
-    public function getCart(array $request = []): array;
+    public function getCart(): array;
 
     /**
      * Add an item to the cart.
      */
-    public function addItem(array $request): void;
+    public function addItem(array $request): bool;
 
     /**
      * Update the quantity of an item in the cart.
@@ -27,5 +27,5 @@ interface Cart
     /**
      * Clear all items in the cart.
      */
-    public function clearCart(string $cartId): void;
+    public function clearCart(): void;
 }

@@ -6,7 +6,6 @@ use Ccns\CcnsEcommerceCart\Contracts\CartStorageContract;
 
 class ArrayCartStorage implements CartStorageContract
 {
-
     public function has(string $userId): bool
     {
         // TODO: Implement has() method.

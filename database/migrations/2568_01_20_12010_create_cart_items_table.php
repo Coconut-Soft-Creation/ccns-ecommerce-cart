@@ -14,10 +14,8 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id')->index();
             $table->json('options')->nullable();
             $table->integer('quantity')->default(1);
-            $table->decimal('price', 10, 2)->default(0);
+            $table->decimal('price')->default(0);
             $table->timestamps();
-            $table->softDeletes();
-
         });
     }
 
