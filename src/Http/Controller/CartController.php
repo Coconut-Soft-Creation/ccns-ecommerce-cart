@@ -2,8 +2,10 @@
 
 namespace Ccns\CcnsEcommerceCart\Http\Controller;
 
+use App\Models\User;
 use Ccns\CcnsEcommerceCart\Facades\Cart as CartFacade;
 use Ccns\CcnsEcommerceCart\Http\Resources\CartCollection;
+use Ccns\CcnsEcommerceCart\Http\Resources\CartResource;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
@@ -19,10 +21,7 @@ class CartController extends Controller
     public function index(): View
     {
         $cartResults = CartFacade::getCart();
-        $cartObjects = new CartCollection($cartResults);
-        $cart = $cartResults->toArray(request());
-
-        dd($cart);
+        $cart = new CartResource($cartResults);
 
         return view('ccns-ecommerce-cart::cart-index', compact('cart'));
     }

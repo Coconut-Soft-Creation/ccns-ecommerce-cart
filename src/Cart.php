@@ -5,6 +5,7 @@ namespace Ccns\CcnsEcommerceCart;
 use Ccns\CcnsEcommerceCart\Contracts\Cart as CartContract;
 use Ccns\CcnsEcommerceCart\Contracts\CartStorageContract;
 use Ccns\CcnsEcommerceCart\Managers\CartDriverManager;
+use Illuminate\Support\Facades\Auth;
 
 class Cart implements CartContract
 {
@@ -19,8 +20,8 @@ class Cart implements CartContract
     public function getCart(): array
     {
         $cart = $this->cartStorage->hasCart()
-            ? $this->cartStorage->makeCart()
-            : $this->cartStorage->getCart();
+            ? $this->cartStorage->getCart()
+            : $this->cartStorage->makeCart();
 
         return $cart->toArray();
     }

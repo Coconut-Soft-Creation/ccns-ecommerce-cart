@@ -10,15 +10,16 @@ class CartResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'product' => $this->product,
-            'options' => $this->options,
-            'price' => $this->price,
-            'quantity' => $this->quantity,
-            'total_price' => $this->price * $this->quantity,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'id' => $this['id'],
+            'user_id' => $this['user_id'],
+            'session_id' => $this['session_id'] ?? '',
+            'vat' => $this['vat'] ?? 0,
+            'shipping' => $this['shipping'] ?? 0,
+            'discount' => $this['discount'] ?? 0,
+            'total_price' => $this['total_price'] ?? 0,
+            'items' => collect($this['items'])->isEmpty()
+                ? CartItemResource::collection($this['items'])->toArray($request)
+                : [],
         ];
     }
 }

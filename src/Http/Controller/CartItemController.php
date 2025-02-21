@@ -14,6 +14,7 @@ class CartItemController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        dd($request);
         CartFacade::addItem($request->toArray());
 
         return redirect()->route('cart.index')->with('success', 'Product added to cart!');

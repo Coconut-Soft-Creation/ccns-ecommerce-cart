@@ -3,7 +3,7 @@
         <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
 
         <ul role="list" class="divide-y divide-gray-200 border-b border-t border-gray-200">
-            @foreach($cart['data'] as $item)
+            @foreach($cart['items'] as $item)
                 <li class="flex py-6 sm:py-10">
                     <div class="shrink-0">
                         <img src="https://placehold.co/400x400" alt=""
@@ -46,7 +46,7 @@
                         </div>
 
                         <p class="mt-4 flex space-x-2 text-sm text-gray-700">
-                            <span>รวม {{ $item->total_price }}</span>
+                            <span>รวม {{ $item->sub_total }}</span>
                         </p>
                     </div>
                 </li>
@@ -63,7 +63,7 @@
         <dl class="mt-6 space-y-4">
             <div class="flex items-center justify-between">
                 <dt class="text-sm text-gray-600">Subtotal</dt>
-                <dd class="text-sm font-medium text-gray-900">{{ number_format($cart['summary']['subtotal'], 2) }}</dd>
+                <dd class="text-sm font-medium text-gray-900">{{ number_format($cart['vat'], 2) }}</dd>
             </div>
             <div class="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt class="flex items-center text-sm text-gray-600">
@@ -77,7 +77,7 @@
                         </svg>
                     </a>
                 </dt>
-                <dd class="text-sm font-medium text-gray-900">{{ number_format($cart['summary']['shipping'], 2) }}</dd>
+                <dd class="text-sm font-medium text-gray-900">{{ number_format($cart['shipping'], 2) }}</dd>
             </div>
             <div class="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt class="flex text-sm text-gray-600">
@@ -91,11 +91,11 @@
                         </svg>
                     </a>
                 </dt>
-                <dd class="text-sm font-medium text-gray-900">{{ number_format($cart['summary']['discount'], 2) }}</dd>
+                <dd class="text-sm font-medium text-gray-900">{{ number_format($cart['discount'], 2) }}</dd>
             </div>
             <div class="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt class="text-base font-medium text-gray-900">Order total</dt>
-                <dd class="text-base font-medium text-gray-900">{{ number_format($cart['summary']['total'], 2) }}</dd>
+                <dd class="text-base font-medium text-gray-900">{{ number_format($cart['total_price'], 2) }}</dd>
             </div>
         </dl>
 

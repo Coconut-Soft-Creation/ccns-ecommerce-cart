@@ -10,12 +10,12 @@ class CartPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(?User $user): bool
+    public function viewCart(?User $user): bool
     {
         return ! ($user === null);
     }
 
-    public function delete(User $user, Cart $cart): bool
+    public function clearCart(User $user, Cart $cart): bool
     {
         return $user->id === $cart->user_id && $cart->items()->count() !== 0;
     }

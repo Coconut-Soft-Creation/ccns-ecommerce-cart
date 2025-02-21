@@ -10,17 +10,17 @@ class CartItemPolicy
 {
     use HandlesAuthorization;
 
-    public function create(User $user, CartItem $cartItem): bool
+    public function addItemToCart(User $user, CartItem $cartItem): bool
     {
         return $user->id === $cartItem->cart->user_id;
     }
 
-    public function update(User $user, CartItem $cartItem): bool
+    public function editItemInCart(User $user, CartItem $cartItem): bool
     {
         return $user->id === $cartItem->cart->user_id;
     }
 
-    public function delete(User $user, CartItem $cartItem): bool
+    public function removeItemFromCart(User $user, CartItem $cartItem): bool
     {
         return $user->id === $cartItem->cart->user_id;
     }

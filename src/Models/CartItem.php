@@ -2,13 +2,18 @@
 
 namespace Ccns\CcnsEcommerceCart\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CartItem extends Model
 {
-    use HasFactory;
+    use HasUuids, HasFactory;
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
 
     protected $fillable = [
         'cart_id',
@@ -16,6 +21,7 @@ class CartItem extends Model
         'options',
         'quantity',
         'price',
+        'subtotal',
     ];
 
     protected $casts = [
