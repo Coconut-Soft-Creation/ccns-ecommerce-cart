@@ -5,7 +5,6 @@ namespace Ccns\CcnsEcommerceCart;
 use Ccns\CcnsEcommerceCart\Contracts\Cart as CartContract;
 use Ccns\CcnsEcommerceCart\Contracts\CartStorageContract;
 use Ccns\CcnsEcommerceCart\Managers\CartDriverManager;
-use Illuminate\Support\Facades\Auth;
 
 class Cart implements CartContract
 {
@@ -28,17 +27,17 @@ class Cart implements CartContract
 
     public function addItem(array $request): bool
     {
-        $this->cartStorage->addItem($request);
+        return $this->cartStorage->addItem($request);
     }
 
     public function editItem(array $request, string $cartItemId): bool
     {
-        $this->cartStorage->editItem($request, $cartItemId);
+        return $this->cartStorage->editItem($request, $cartItemId);
     }
 
     public function removeItem(string $cartItemId): bool
     {
-        $this->cartStorage->removeItem($cartItemId);
+        return $this->cartStorage->removeItem($cartItemId);
     }
 
     public function clearCart(): void

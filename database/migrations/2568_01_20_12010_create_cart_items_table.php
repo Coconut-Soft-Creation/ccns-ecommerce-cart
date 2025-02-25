@@ -12,7 +12,7 @@ return new class extends Migration
             $table->uuid('id')->primary()->index();
             $table->string('cart_id')->index();
             $table->unsignedBigInteger('product_id')->index();
-            $table->json('options')->nullable();
+            $table->json('options')->nullable()->default(null);
             $table->integer('quantity')->default(1);
             $table->decimal('price')->default(0);
             $table->decimal('subtotal')->default(0);

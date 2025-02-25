@@ -16,7 +16,7 @@ class CartItemResource extends JsonResource
             'options' => $this['options'] ?? [],
             'quantity' => $this['quantity'],
             'price' => $this['price'],
-            'subtotal' => $this['quantity'] * $this['price']
+            'subtotal' => $this['quantity'] * $this['price'],
         ];
     }
 }

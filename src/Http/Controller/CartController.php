@@ -2,9 +2,7 @@
 
 namespace Ccns\CcnsEcommerceCart\Http\Controller;
 
-use App\Models\User;
 use Ccns\CcnsEcommerceCart\Facades\Cart as CartFacade;
-use Ccns\CcnsEcommerceCart\Http\Resources\CartCollection;
 use Ccns\CcnsEcommerceCart\Http\Resources\CartResource;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

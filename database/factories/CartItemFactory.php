@@ -14,7 +14,7 @@ class CartItemFactory extends Factory
     {
         return [
             'cart_id' => Cart::factory(),
-            'product_id' => $this->faker->uuid(),
+            'product_id' => $this->faker->numberBetween(1, 99),
             'options' => [],
             'quantity' => 1,
             'price' => 1,

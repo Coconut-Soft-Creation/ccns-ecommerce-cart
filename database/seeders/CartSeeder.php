@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Database\Factories\CartFactory;
-use Database\Factories\CartItemFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -20,7 +19,7 @@ class CartSeeder extends Seeder
                     'product_id' => Str::uuid(),
                     'price' => 1,
                     'quantity' => 1,
-                    'subtotal' => 1
+                    'subtotal' => 1,
                 ]);
             });
     }

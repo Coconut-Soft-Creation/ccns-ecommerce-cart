@@ -34,18 +34,18 @@ class DatabaseCartStorage implements CartStorageContract
             : $cartModel->where(['session_id' => Session::id()])->first();
     }
 
-    public function hasItem(string $itemId): bool
+    public function hasItem(string $productId): bool
     {
         $cart = $this->getCart();
 
-        return $cart->items->where('id', $itemId)->exists();
+        return $cart->items()->where('product_id', $productId)->exists();
     }
 
-    public function getItem(string $itemId): CartItemModel
+    public function getItem(string $productId): CartItemModel
     {
         $cart = $this->getCart();
 
-        return $cart->items->where('id', $itemId)->first();
+        return $cart->items()->firstWhere('product_id', $productId);
     }
 
     public function addItem(array $request): bool
@@ -54,19 +54,30 @@ class DatabaseCartStorage implements CartStorageContract
 
         DB::beginTransaction();
 
-        if (!$cart->items()->updateOrInsert(
-            ['product_id' => $request['product_id']],
-            [
-                'options' => $request['options'],
-                'quantity' => DB::raw('quantity + ' . $request['quantity']),
-                'price' => $request['price'],
-            ]
-        )) {
-            DB::rollBack();
+        if ($this->hasItem($request['product_id'])) {
+            $item = $this->getItem($request['product_id']);
+            $quantity = $item['quantity'] + $request['quantity'];
+            $subtotal = $item['price'] * $quantity;
+            $item->update([
+                'quantity' => $quantity,
+                'subtotal' => $subtotal,
+            ]);
+        } else {
+            $cart->items()
+                ->create([
+                    'cart_id' => $cart->id,
+                    'product_id' => $request['product_id'],
+                    'options' => $request['options'] ?? [],
+                    'quantity' => $request['quantity'],
+                    'price' => $request['price'],
+                    'subtotal' => $request['quantity'] * $request['price'],
+                ]);
         }
 
-        if (!$this->calculateTotalPrice($cart)) {
+        if (! $this->calculateTotalPrice($cart)) {
             DB::rollBack();
+
+            return false;
         }
 
         DB::commit();
@@ -80,15 +91,18 @@ class DatabaseCartStorage implements CartStorageContract
 
         DB::beginTransaction();
 
-        if (!$cart->items()->where('id', $cartItemId)
-            ->update([
-                'options' => $request['options'],
-                'quantity' => DB::raw('quantity + ' . $request['quantity']),
-            ])) {
-            DB::rollBack();
+        if ($item = $cart->items()->find($cartItemId)) {
+            $quantity = $item['quantity'] + $request['quantity'];
+            $subtotal = $item['price'] * $quantity;
+            $item->update([
+                'quantity' => $quantity,
+                'subtotal' => $subtotal,
+            ]);
+        } else {
+            return false;
         }
 
-        if (!$this->calculateTotalPrice($cart)) {
+        if (! $this->calculateTotalPrice($cart)) {
             DB::rollBack();
         }
 
@@ -101,18 +115,42 @@ class DatabaseCartStorage implements CartStorageContract
     {
         $cart = $this->getCart();
 
-        return $cart->items()->where('id', $cartItemId)->delete();
+        DB::beginTransaction();
+
+        if ($item = $cart->items()->find($cartItemId)) {
+            $item->delete();
+        } else {
+            return false;
+        }
+
+        if (! $this->calculateTotalPrice($cart)) {
+            DB::rollBack();
+
+            return false;
+        }
+
+        DB::commit();
+
+        return true;
     }
 
     public function clearCart(): bool
     {
         $cart = $this->getCart();
 
-        return $cart->items()->delete();
+        if ($cart->items()->count()) {
+            $cart->items()->delete();
+        }
+
+        if ($cart->delete()) {
+            return true;
+        }
+
+        return false;
     }
 
-    public function calculateTotalPrice(CartModel $cartModel): bool
+    public function calculateTotalPrice(CartModel $cart): bool
     {
-        return $cartModel->update(['total_price' => $cartModel->items()->sum(DB::raw('quantity * price'))]);
+        return $cart->update(['total_price' => $cart->items()->sum('subtotal')]);
     }
 }

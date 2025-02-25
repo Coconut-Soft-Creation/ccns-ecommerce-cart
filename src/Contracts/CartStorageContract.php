@@ -13,9 +13,9 @@ interface CartStorageContract
 
     public function getCart(): CartModel;
 
-    public function hasItem(string $itemId): bool;
+    public function hasItem(string $productId): bool;
 
-    public function getItem(string $itemId): CartItemModel;
+    public function getItem(string $productId): CartItemModel;
 
     public function addItem(array $request): bool;
 
@@ -25,5 +25,5 @@ interface CartStorageContract
 
     public function clearCart(): bool;
 
-    public function calculateTotalPrice(CartModel $cartModel): bool;
+    public function calculateTotalPrice(CartModel $cart): bool;
 }
