@@ -4,6 +4,7 @@
 
         <ul role="list" class="divide-y divide-gray-200 border-b border-t border-gray-200">
             @foreach($cart['items'] as $item)
+
                 <li class="flex py-6 sm:py-10">
                     <div class="shrink-0">
                         <img src="https://placehold.co/400x400" alt=""
@@ -16,19 +17,19 @@
                                 <div class="flex justify-between">
                                     <h3 class="text-sm">
                                         <a href="#"
-                                           class="font-medium text-gray-700 hover:text-gray-800">รหัส {{ $item->product_id }}</a>
+                                           class="font-medium text-gray-700 hover:text-gray-800">รหัส {{ $item['product_id'] }}</a>
                                     </h3>
                                 </div>
                                 <div class="mt-1 flex text-sm">
                                     <p class="text-gray-500">ราคา</p>
                                     <p class="ml-4 border-l border-gray-200 pl-4 text-gray-500">บาท</p>
                                 </div>
-                                <p class="mt-1 text-sm font-medium text-gray-900">{{ $item->price }}</p>
+                                <p class="mt-1 text-sm font-medium text-gray-900">{{ number_format($item['price'], 2) }}</p>
                             </div>
 
                             <div class="mt-4 sm:mt-0 sm:pr-9">
                                 <div class="grid w-full max-w-16 grid-cols-1">
-                                    <p class="mt-1 text-sm font-medium text-gray-900">จำนวน {{ $item->quantity }}</p>
+                                    <p class="mt-1 text-sm font-medium text-gray-900">จำนวน {{ $item['quantity'] }}</p>
                                 </div>
 
                                 <div class="absolute right-0 top-0">
@@ -46,7 +47,7 @@
                         </div>
 
                         <p class="mt-4 flex space-x-2 text-sm text-gray-700">
-                            <span>รวม {{ $item->sub_total }}</span>
+                            <span>รวม {{ number_format($item['subtotal'], 2) }}</span>
                         </p>
                     </div>
                 </li>

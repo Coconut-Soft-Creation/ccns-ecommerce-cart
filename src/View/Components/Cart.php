@@ -2,21 +2,17 @@
 
 namespace Ccns\CcnsEcommerceCart\View\Components;
 
+use Ccns\CcnsEcommerceCart\Http\Resources\CartResource;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class Cart extends Component
 {
-    public array $cart = [];
-
     /**
      * Create a new component instance.
      */
-    public function __construct(array $cart = [])
-    {
-        $this->cart = $cart;
-    }
+    public function __construct(public CartResource $cart) {}
 
     /**
      * Get the view / contents that represent the component.
