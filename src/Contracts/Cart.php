@@ -2,29 +2,30 @@
 
 namespace Ccns\CcnsEcommerceCart\Contracts;
 
-use Ccns\CcnsEcommerceCart\Http\Requests\StoreCartRequest;
-use Ccns\CcnsEcommerceCart\Http\Requests\UpdateCartRequest;
-use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
-
 interface Cart
 {
     /**
      * Get all items in the cart.
      */
-    public function getItems(): array;
+    public function getCart(): array;
 
     /**
      * Add an item to the cart.
      */
-    public function addItem(StoreCartRequest $request): CartModel;
+    public function addItem(array $request): bool;
 
     /**
      * Update the quantity of an item in the cart.
      */
-    public function updateItem(UpdateCartRequest $request, string $cartId): bool;
+    public function editItem(array $request, string $cartItemId): bool;
 
     /**
      * Remove an item from the cart.
      */
-    public function removeItem(string $cartId): bool;
+    public function removeItem(string $cartItemId): bool;
+
+    /**
+     * Clear all items in the cart.
+     */
+    public function clearCart(): void;
 }

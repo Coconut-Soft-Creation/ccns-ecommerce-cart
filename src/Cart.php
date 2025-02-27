@@ -3,46 +3,45 @@
 namespace Ccns\CcnsEcommerceCart;
 
 use Ccns\CcnsEcommerceCart\Contracts\Cart as CartContract;
-use Ccns\CcnsEcommerceCart\Http\Requests\StoreCartRequest;
-use Ccns\CcnsEcommerceCart\Http\Requests\UpdateCartRequest;
-use Ccns\CcnsEcommerceCart\Http\Resources\CartCollection;
-use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
+use Ccns\CcnsEcommerceCart\Contracts\CartStorageContract;
+use Ccns\CcnsEcommerceCart\Managers\CartDriverManager;
 
 class Cart implements CartContract
 {
-    public function getItems(): array
-    {
-        $carts = CartModel::where('user_id', request()->user()->id)->get();
-        $cartObjects = new CartCollection($carts);
+    protected CartStorageContract $cartStorage;
 
-        return $cartObjects->toArray(request());
+    public function __construct(
+        protected CartDriverManager $driverManager
+    ) {
+        $this->cartStorage = $driverManager->createDriver(env('CART_DRIVER'));
     }
 
-    public function addItem(StoreCartRequest $request): CartModel
+    public function getCart(): array
     {
-        return CartModel::updateOrCreate([
-            'user_id' => request()->user()->id,
-            'product->id' => $request->product['id'],
-        ], [
-            'product' => $request->product ?? [],
-            'options' => $request->option ?? [],
-            'price' => $request->price ?? 0,
-            'quantity' => $request->quantity ?? 1,
-            'total_price' => $request->quantity * $request->price,
-        ]);
+        $cart = $this->cartStorage->hasCart()
+            ? $this->cartStorage->getCart()
+            : $this->cartStorage->makeCart();
+
+        return $cart->toArray();
     }
 
-    public function updateItem(UpdateCartRequest $request, string $cartId): bool
+    public function addItem(array $request): bool
     {
-        return CartModel::where('id', $cartId)
-            ->where('user_id', request()->user()->id)
-            ->update(['quantity' => $request->quantity]);
+        return $this->cartStorage->addItem($request);
     }
 
-    public function removeItem(string $cartId): bool
+    public function editItem(array $request, string $cartItemId): bool
     {
-        return CartModel::where('id', $cartId)
-            ->where('user_id', request()->user()->id)
-            ->delete();
+        return $this->cartStorage->editItem($request, $cartItemId);
+    }
+
+    public function removeItem(string $cartItemId): bool
+    {
+        return $this->cartStorage->removeItem($cartItemId);
+    }
+
+    public function clearCart(): void
+    {
+        $this->cartStorage->clearCart();
     }
 }

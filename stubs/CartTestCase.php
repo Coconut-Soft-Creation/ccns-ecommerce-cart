@@ -1,7 +1,5 @@
 <?php
 
-namespace Ccns\CcnsEcommerceCart\Tests;
-
 use App\Models\User;
 use Ccns\CcnsEcommerceCart\Models\Cart;
 use Illuminate\Foundation\Testing\RefreshDatabase;

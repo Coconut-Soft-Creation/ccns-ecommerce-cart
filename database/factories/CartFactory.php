@@ -12,22 +12,13 @@ class CartFactory extends Factory
 
     public function definition(): array
     {
-        $quantity = $this->faker->randomDigitNotZero();
-        $price = $this->faker->randomNumber();
-
         return [
             'user_id' => User::factory(),
-            'product' => [
-                'id' => $this->faker->uuid,
-                'name' => $this->faker->userName,
-                'slug' => $this->faker->slug,
-                'description' => 'description',
-                'price' => $price,
-            ],
-            'options' => [],
-            'price' => $price,
-            'quantity' => $quantity,
-            'total_price' => $price * $quantity,
+            'session_id' => null,
+            'vat' => 0,
+            'shipping' => 0,
+            'discount' => 0,
+            'total_price' => 0,
         ];
     }
 }
