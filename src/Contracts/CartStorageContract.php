@@ -7,15 +7,9 @@ use Ccns\CcnsEcommerceCart\Models\CartItem as CartItemModel;
 
 interface CartStorageContract
 {
-    public function hasCart(): bool;
+    public function getCart(): array;
 
-    public function makeCart(): CartModel;
-
-    public function getCart(): CartModel;
-
-    public function hasItem(string $productId): bool;
-
-    public function getItem(string $productId): CartItemModel;
+    public function getItem(string $productId): array;
 
     public function addItem(array $request): bool;
 
@@ -25,5 +19,5 @@ interface CartStorageContract
 
     public function clearCart(): bool;
 
-    public function calculateTotalPrice(CartModel $cart): bool;
+    public function calculateTotalPrice(string $cartId): bool;
 }

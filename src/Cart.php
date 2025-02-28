@@ -18,11 +18,7 @@ class Cart implements CartContract
 
     public function getCart(): array
     {
-        $cart = $this->cartStorage->hasCart()
-            ? $this->cartStorage->getCart()
-            : $this->cartStorage->makeCart();
-
-        return $cart->toArray();
+        return $this->cartStorage->getCart();
     }
 
     public function addItem(array $request): bool
