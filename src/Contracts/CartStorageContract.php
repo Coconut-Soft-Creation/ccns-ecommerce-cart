@@ -2,14 +2,11 @@
 
 namespace Ccns\CcnsEcommerceCart\Contracts;
 
-use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
-use Ccns\CcnsEcommerceCart\Models\CartItem as CartItemModel;
-
 interface CartStorageContract
 {
     public function getCart(): array;
 
-    public function getItem(string $productId): array;
+    public function getItem(string $itemId): array;
 
     public function addItem(array $request): bool;
 

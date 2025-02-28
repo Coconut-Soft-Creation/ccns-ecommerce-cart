@@ -16,17 +16,15 @@ class DatabaseCartStorage implements CartStorageContract
         $cartModel = CartModel::with('items');
 
         $cart = Auth::check()
-            ? $cartModel->where(['user_id' => Auth::id()])->first()
-            : $cartModel->where(['session_id' => Session::id()])->first();
+            ? $cartModel->firstWhere(['user_id' => Auth::id()])
+            : $cartModel->firstWhere(['session_id' => Session::id()]);
 
-        return $cart->toArray();
+        return ($cart) ? $cart->toArray() : [];
     }
 
-    public function getItem(string $productId): array
+    public function getItem(string $itemId): array
     {
-        $cart = $this->getCart();
-        $item = CartModel::make($cart)->items()
-            ->firstWhere('product_id', $productId);
+        $item = CartItemModel::find($itemId);
 
         return ($item) ? $item->toArray() : [];
     }
@@ -34,32 +32,30 @@ class DatabaseCartStorage implements CartStorageContract
     public function addItem(array $request): bool
     {
         $cart = $this->getCart();
-        $item = $this->getItem($request['product_id']);
+        $item = collect($cart['items'])->firstWhere('product_id', $request['product_id']);
 
         DB::beginTransaction();
-        if (collect($item)->isEmpty()) {
-            $cartItemModel = new CartItemModel();
+        if (is_null($item)) {
+            $cartItemModel = new CartItemModel;
             $cartItemModel->fill($request);
             $cartItemModel['cart_id'] = $cart['id'];
             $cartItemModel['subtotal'] = $request['quantity'] * $request['price'];
-            if (!$cartItemModel->save()) {
-                DB::rollBack();
-                return false;
-            }
         } else {
-            $cartItemModel = CartItemModel::make($item);
+            $cartItemModel = CartItemModel::find($item['id']);
             $quantity = $item['quantity'] + $request['quantity'];
             $subtotal = $item['price'] * $quantity;
             $cartItemModel->quantity = $quantity;
             $cartItemModel->subtotal = $subtotal;
-            if (!$cartItemModel->save()) {
-                DB::rollBack();
-                return false;
-            }
+        }
+        if (! $cartItemModel->save()) {
+            DB::rollBack();
+
+            return false;
         }
 
-        if (!$this->calculateTotalPrice($cart['id'])) {
+        if (! $this->calculateTotalPrice($cart['id'])) {
             DB::rollBack();
+
             return false;
         }
         DB::commit();
@@ -70,22 +66,20 @@ class DatabaseCartStorage implements CartStorageContract
     public function editItem(array $request, string $cartItemId): bool
     {
         $cart = $this->getCart();
-        $item = $this->getItem($cartItemId);
 
         DB::beginTransaction();
-        if (collect($item)->isNotEmpty()) {
-            $cartItemModel = CartItemModel::make($item);
-            $subtotal = $item['price'] * $request['quantity'];
-            $cartItemModel->quantity = $request['quantity'];
-            $cartItemModel->subototal = $subtotal;
-            if (!$cartItemModel->save()) {
-                DB::rollBack();
-                return false;
-            }
+        $itemModel = CartItemModel::find($cartItemId);
+        $itemModel->quantity = $request['quantity'];
+        $itemModel->subtotal = $itemModel['price'] * $request['quantity'];
+        if (! $itemModel->save()) {
+            DB::rollBack();
+
+            return false;
         }
 
-        if (!$this->calculateTotalPrice($cart['id'])) {
+        if (! $this->calculateTotalPrice($cart['id'])) {
             DB::rollBack();
+
             return false;
         }
         DB::commit();
@@ -96,19 +90,13 @@ class DatabaseCartStorage implements CartStorageContract
     public function removeItem(string $cartItemId): bool
     {
         $cart = $this->getCart();
-        $item = $this->getItem($cartItemId);
 
         DB::beginTransaction();
-        if (collect($item)->isNotEmpty()) {
-            $cartItemModel = CartItemModel::make($item);
-            if (!$cartItemModel->delete()) {
-                DB::rollBack();
-                return false;
-            }
-        }
+        CartItemModel::destroy($cartItemId);
 
-        if (!$this->calculateTotalPrice($cart['id'])) {
+        if (! $this->calculateTotalPrice($cart['id'])) {
             DB::rollBack();
+
             return false;
         }
         DB::commit();
@@ -120,8 +108,8 @@ class DatabaseCartStorage implements CartStorageContract
     {
         $cart = $this->getCart();
 
-        return collect($cart['items'])->isNotEmpty()
-            ?? (CartModel::make($cart)->items()->delete()->delete());
+        return CartModel::destroy($cart['id'])
+            && CartItemModel::destroy(collect($cart['items'])->pluck('id'));
     }
 
     public function calculateTotalPrice(string $cartId): bool
