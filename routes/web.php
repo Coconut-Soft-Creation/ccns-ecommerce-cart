@@ -5,8 +5,6 @@ use Ccns\CcnsEcommerceCart\Http\Controller\CartItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('cart')->group(function () {
-    Auth::loginUsingId(1);
-
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::delete('/', [CartController::class, 'destroy'])->name('cart.destroy');
 

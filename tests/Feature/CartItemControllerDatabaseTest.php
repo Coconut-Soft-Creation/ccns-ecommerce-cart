@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\CartTestCase;
+use Tests\CartDatabaseTestCase;
 
-class CartItemControllerTest extends CartTestCase
+class CartItemControllerDatabaseTest extends CartDatabaseTestCase
 {
     public function test_user_can_add_product_to_cart(): void
     {

@@ -3,54 +3,29 @@
 namespace Ccns\CcnsEcommerceCart\Storages;
 
 use Ccns\CcnsEcommerceCart\Contracts\CartStorageContract;
-use Ccns\CcnsEcommerceCart\Models\Cart as CartModel;
-use Ccns\CcnsEcommerceCart\Models\CartItem as CartItemModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Session;
 
 class RedisCartStorage implements CartStorageContract
 {
-    protected string $prefix = 'cart-';
-
-    protected string $key = 'u' . Auth::id;
-
     /**
-     * @return bool
+     * @return array
      */
-    public function hasCart(): bool
+    public function getCart(): array
     {
-        return Redis::command('exists', [$this->prefix . $this->key]);
+        Redis::command('exists', [$this->cartKey()])
+            ? Redis::command('get', [$this->cartKey()])
+            : Redis::command('set', [$this->cartKey(), json_encode($this->cartStructure(), JSON_UNESCAPED_UNICODE)]);
+
+        return json_decode(Redis::command('get', [$this->cartKey()]), true);
     }
 
     /**
-     * @return CartModel
+     * @param string $itemId
+     * @return array
      */
-    public function makeCart(): CartModel
-    {
-    }
-
-    /**
-     * @return CartModel
-     */
-    public function getCart(): CartModel
-    {
-        // TODO: Implement getCart() method.
-    }
-
-    /**
-     * @param string $productId
-     * @return bool
-     */
-    public function hasItem(string $productId): bool
-    {
-        // TODO: Implement hasItem() method.
-    }
-
-    /**
-     * @param string $productId
-     * @return CartItemModel
-     */
-    public function getItem(string $productId): CartItemModel
+    public function getItem(string $itemId): array
     {
         // TODO: Implement getItem() method.
     }
@@ -88,15 +63,45 @@ class RedisCartStorage implements CartStorageContract
      */
     public function clearCart(): bool
     {
-        // TODO: Implement clearCart() method.
+        return Redis::command('del', [$this->cartKey()]);
     }
 
     /**
-     * @param CartModel $cart
+     * @param string $cartId
      * @return bool
      */
-    public function calculateTotalPrice(CartModel $cart): bool
+    public function calculateTotalPrice(string $cartId): bool
     {
         // TODO: Implement calculateTotalPrice() method.
+    }
+
+    protected function cartKey(): string
+    {
+        return 'cart_u' . Auth::check() ? Auth::id() : Session::getId();
+    }
+
+    protected function cartStructure(): array
+    {
+        return [
+            'user_id' => Auth::check() ? Auth::id() : null,
+            'session_id' => Auth::check() ? null : Session::getId(),
+            'vat' => 0,
+            'shipping' => 0,
+            'discount' => 0,
+            'total_price' => 0,
+            'items' => []
+        ];
+    }
+
+    protected function cartItemStructure(): array
+    {
+        return [
+            'cart_id' => $this->cartKey(),
+            'product_id' => null,
+            'options' => [],
+            'quantity' => 0,
+            'price' => 0,
+            'subtotal' => 0,
+        ];
     }
 }

@@ -7,9 +7,6 @@ use Ccns\CcnsEcommerceCart\Storages\DatabaseCartStorage;
 use Ccns\CcnsEcommerceCart\Storages\FileCartStorage;
 use Ccns\CcnsEcommerceCart\Storages\RedisCartStorage;
 use Ccns\CcnsEcommerceCart\Storages\SessionCartStorage;
-use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Database\Connection;
-use Illuminate\Filesystem\Filesystem;
 use InvalidArgumentException;
 
 class CartDriverManager
@@ -30,11 +27,11 @@ class CartDriverManager
         }
 
         return match ($driver) {
-            'database' => new DatabaseCartStorage(app(Connection::class)),
-            'redis' => new RedisCartStorage(app(Cache::class)),
-            'session' => new SessionCartStorage,
-            'file' => new FileCartStorage(app(Filesystem::class)),
-            'array' => new ArrayCartStorage,
+            'database' => new DatabaseCartStorage(),
+            'redis' => new RedisCartStorage(),
+            'session' => new SessionCartStorage(),
+            'file' => new FileCartStorage(),
+            'array' => new ArrayCartStorage(),
         };
     }
 }

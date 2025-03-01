@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Tests\CartTestCase;
 
-class CartControllerTest extends CartTestCase
+class CartControllerDatabaseTest extends CartTestCase
 {
     public function test_user_can_create_cart(): void
     {
