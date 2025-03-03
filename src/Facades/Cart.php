@@ -2,6 +2,7 @@
 
 namespace Ccns\CcnsEcommerceCart\Facades;
 
+use Ccns\CcnsEcommerceCart\Contracts\CartStorageContract;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -15,6 +16,6 @@ class Cart extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return 'cart';
+        return CartStorageContract::class;
     }
 }

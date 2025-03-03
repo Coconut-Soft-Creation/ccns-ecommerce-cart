@@ -4,6 +4,7 @@ namespace Ccns\CcnsEcommerceCart;
 
 use Ccns\CcnsEcommerceCart\Cart as CartService;
 use Ccns\CcnsEcommerceCart\Console\InstallCommand;
+use Ccns\CcnsEcommerceCart\Contracts\CartStorageContract;
 use Ccns\CcnsEcommerceCart\Managers\CartDriverManager;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -26,10 +27,12 @@ class CartServiceProvider extends ServiceProvider
 
     protected function registerBindings(): void
     {
-        $this->app->singleton('cart', function ($app) {
-            return new CartService(
-                app()->make(CartDriverManager::class)
-            );
+        $this->app->singleton(CartDriverManager::class, function () {
+            return new CartDriverManager();
+        });
+
+        $this->app->bind(CartStorageContract::class, function () {
+            return CartDriverManager::createDriver();
         });
     }
 

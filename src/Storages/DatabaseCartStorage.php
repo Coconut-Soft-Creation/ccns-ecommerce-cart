@@ -53,7 +53,7 @@ class DatabaseCartStorage implements CartStorageContract
             return false;
         }
 
-        if (! $this->calculateTotalPrice($cart['id'])) {
+        if (! $this->calculateTotalPrice()) {
             DB::rollBack();
 
             return false;
@@ -77,7 +77,7 @@ class DatabaseCartStorage implements CartStorageContract
             return false;
         }
 
-        if (! $this->calculateTotalPrice($cart['id'])) {
+        if (! $this->calculateTotalPrice()) {
             DB::rollBack();
 
             return false;
@@ -94,7 +94,7 @@ class DatabaseCartStorage implements CartStorageContract
         DB::beginTransaction();
         CartItemModel::destroy($cartItemId);
 
-        if (! $this->calculateTotalPrice($cart['id'])) {
+        if (! $this->calculateTotalPrice()) {
             DB::rollBack();
 
             return false;
@@ -112,9 +112,11 @@ class DatabaseCartStorage implements CartStorageContract
             && CartItemModel::destroy(collect($cart['items'])->pluck('id'));
     }
 
-    public function calculateTotalPrice(string $cartId): bool
+    public function calculateTotalPrice(): bool
     {
-        return ($cart = CartModel::find($cartId))
+        $cart = $this->getCart();
+
+        return ($cart = CartModel::find($cart['id']))
             && $cart->update(['total_price' => $cart->items()->sum('subtotal')]);
     }
 }

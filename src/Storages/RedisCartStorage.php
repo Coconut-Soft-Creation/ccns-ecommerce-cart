@@ -14,9 +14,10 @@ class RedisCartStorage implements CartStorageContract
      */
     public function getCart(): array
     {
-        Redis::command('exists', [$this->cartKey()])
+        Redis::command('exists', [$this->cartKey()]) > 0
             ? Redis::command('get', [$this->cartKey()])
             : Redis::command('set', [$this->cartKey(), json_encode($this->cartStructure(), JSON_UNESCAPED_UNICODE)]);
+
 
         return json_decode(Redis::command('get', [$this->cartKey()]), true);
     }
@@ -27,7 +28,13 @@ class RedisCartStorage implements CartStorageContract
      */
     public function getItem(string $itemId): array
     {
-        // TODO: Implement getItem() method.
+        $cart = $this->getCart();
+
+        return !empty($cart['items'])
+            ? collect($cart['items'])
+                ->firstWhere('id', $itemId)
+                ->toArray()
+            : [];
     }
 
     /**
@@ -36,7 +43,16 @@ class RedisCartStorage implements CartStorageContract
      */
     public function addItem(array $request): bool
     {
-        // TODO: Implement addItem() method.
+        if ($this->getItem($this->itemKey($request['product_id']))) {
+            $this->editItem($request, $this->itemKey($request['product_id']));
+        }
+
+        // TODO add new item into array key "items"
+
+        return "OK" === Redis::command('set', [
+            $this->cartKey(),
+            json_encode($cart, JSON_UNESCAPED_UNICODE)
+        ]);
     }
 
     /**
@@ -46,7 +62,22 @@ class RedisCartStorage implements CartStorageContract
      */
     public function editItem(array $request, string $cartItemId): bool
     {
-        // TODO: Implement editItem() method.
+        $cart = collect($this->getCart());
+        $items = $cart->has('items') ? $cart->get('items') : [];
+        $item = $this->getItem($cartItemId);
+
+        $items = !empty($items) && !empty($item)
+            ?? collect($items)->search(function ($item) use ($request) {
+                $item['quantity'] += $request['quantity'];
+                $item['subtotal'] = $item['quantity'] * $item['price'];
+            });
+
+        // TODO update an existing item from array key "items"
+
+        return "OK" === Redis::command('set', [
+            $this->cartKey(),
+            json_encode($cart, JSON_UNESCAPED_UNICODE)
+        ]);
     }
 
     /**
@@ -55,7 +86,6 @@ class RedisCartStorage implements CartStorageContract
      */
     public function removeItem(string $cartItemId): bool
     {
-        // TODO: Implement removeItem() method.
     }
 
     /**
@@ -67,20 +97,27 @@ class RedisCartStorage implements CartStorageContract
     }
 
     /**
-     * @param string $cartId
      * @return bool
      */
-    public function calculateTotalPrice(string $cartId): bool
+    public function calculateTotalPrice(): bool
     {
-        // TODO: Implement calculateTotalPrice() method.
     }
 
     protected function cartKey(): string
     {
-        return 'cart_u' . Auth::check() ? Auth::id() : Session::getId();
+        $cartKey = Auth::check() ? Auth::id() : Session::getId();
+
+        return 'cart_u' . $cartKey;
     }
 
-    protected function cartStructure(): array
+    protected function itemKey(string $productId): string
+    {
+        $itemKey = Auth::check() ? Auth::id() : Session::getId();
+
+        return 'item_u' . $itemKey . '_p' . $productId;
+    }
+
+    protected function cartStructure(array $item = []): array
     {
         return [
             'user_id' => Auth::check() ? Auth::id() : null,
@@ -89,19 +126,22 @@ class RedisCartStorage implements CartStorageContract
             'shipping' => 0,
             'discount' => 0,
             'total_price' => 0,
-            'items' => []
+            'items' => $this->cartItemStructure($item),
         ];
     }
 
-    protected function cartItemStructure(): array
+    protected function cartItemStructure(array $item): array
     {
-        return [
-            'cart_id' => $this->cartKey(),
-            'product_id' => null,
-            'options' => [],
-            'quantity' => 0,
-            'price' => 0,
-            'subtotal' => 0,
-        ];
+        return !empty($item) ?
+            [
+                'id' => $this->itemKey($item['product_id']),
+                'cart_id' => $this->cartKey(),
+                'product_id' => array_key_exists('product_id', $item) ? $item['product_id'] : null,
+                'options' => array_key_exists('options', $item) ? $item['options'] : [],
+                'quantity' => array_key_exists('quantity', $item) ? $item['quantity'] : 1,
+                'price' => array_key_exists('price', $item) ? $item['price'] : 1,
+                'subtotal' => $item['quantity'] * $item['price']
+            ]
+            : [];
     }
 }

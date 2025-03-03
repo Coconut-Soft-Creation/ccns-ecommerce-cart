@@ -16,5 +16,5 @@ interface CartStorageContract
 
     public function clearCart(): bool;
 
-    public function calculateTotalPrice(string $cartId): bool;
+    public function calculateTotalPrice(): bool;
 }

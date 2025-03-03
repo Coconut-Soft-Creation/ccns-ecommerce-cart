@@ -2,36 +2,33 @@
 
 namespace Ccns\CcnsEcommerceCart\Managers;
 
-use Ccns\CcnsEcommerceCart\Storages\ArrayCartStorage;
+use Ccns\CcnsEcommerceCart\Contracts\CartStorageContract;
 use Ccns\CcnsEcommerceCart\Storages\DatabaseCartStorage;
-use Ccns\CcnsEcommerceCart\Storages\FileCartStorage;
 use Ccns\CcnsEcommerceCart\Storages\RedisCartStorage;
-use Ccns\CcnsEcommerceCart\Storages\SessionCartStorage;
 use InvalidArgumentException;
 
 class CartDriverManager
 {
     protected static array $supportedDrivers = [
-        'database', 'redis', 'session', 'file', 'array',
+        'database', 'redis'
     ];
 
     public static function isSupported(string $driver): bool
     {
-        return in_array($driver, self::$supportedDrivers);
+        return in_array($driver, self::$supportedDrivers, true);
     }
 
-    public static function createDriver(string $driver): ArrayCartStorage|DatabaseCartStorage|FileCartStorage|RedisCartStorage|SessionCartStorage
+    public static function createDriver(?string $driver = null): CartStorageContract
     {
+        $driver = $driver ?? config('cart.driver', 'database');
+
         if (! self::isSupported($driver)) {
             throw new InvalidArgumentException("Unsupported cart driver: {$driver}");
         }
 
         return match ($driver) {
-            'database' => new DatabaseCartStorage(),
-            'redis' => new RedisCartStorage(),
-            'session' => new SessionCartStorage(),
-            'file' => new FileCartStorage(),
-            'array' => new ArrayCartStorage(),
+            'database' => app(DatabaseCartStorage::class),
+            'redis' => app(RedisCartStorage::class),
         };
     }
 }
